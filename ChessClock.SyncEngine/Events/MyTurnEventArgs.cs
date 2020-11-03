@@ -3,8 +3,10 @@ using System;
 
 namespace ChessClock.SyncEngine.Events
 {
-    public class MyTurnEventArgs : EventArgs
+    public class MyTurnEventArgs : BaseGameEventArgs
     {
-        public Game Game { get; set; }
+        public MyTurnEventArgs(Game game) : base(game)
+        {
+        }
     }
 }
