@@ -22,6 +22,16 @@ namespace ChessClock.Model
             return otherPlayer != null && Id == otherPlayer.Id;
         }
 
+        public static bool operator ==(Player a, Player b)
+        {
+            return a.Equals(b);
+        }
+
+        public static bool operator !=(Player a, Player b)
+        {
+            return !(a == b);
+        }
+
         public override string ToString()
         {
             return $"{Name} - {Id}";

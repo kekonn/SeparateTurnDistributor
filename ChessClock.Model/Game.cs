@@ -80,5 +80,21 @@ namespace ChessClock.Model
         {
             return $"{Name} - {Id}";
         }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Game game &&
+                   Id.Equals(game.Id);
+        }
+
+        public static bool operator ==(Game left, Game right)
+        {
+            return EqualityComparer<Game>.Default.Equals(left, right);
+        }
+
+        public static bool operator !=(Game left, Game right)
+        {
+            return !(left == right);
+        }
     }
 }
