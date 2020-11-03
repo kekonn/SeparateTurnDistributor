@@ -2,6 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
+    <ApplicationIcon>hotseat.ico</ApplicationIcon>
+    <Authors>Jonas Van der Aa</Authors>
+    <Product>Standard Turn Distributor SyncEngine</Product>
+    <PackageProjectUrl>https://github.com/kekonn/SeparateTurnDistributor</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/kekonn/SeparateTurnDistributor</RepositoryUrl>
+    <PackageLicenseExpression>https://github.com/kekonn/SeparateTurnDistributor/blob/main/LICENSE</PackageLicenseExpression>
+    <NeutralLanguage>en-150</NeutralLanguage>
   </PropertyGroup>
 
   <ItemGroup>
