@@ -11,7 +11,7 @@ namespace ChessClock.SyncEngine
 {
     public abstract class BaseSyncEngine : ISyncEngine, INotifyPropertyChanged
     {
-        private Timer autoSyncCheckTimer;
+        private Timer autoSyncIntervalTimer;
 
         private bool autoSync = true;
         public bool AutoSync
@@ -48,24 +48,6 @@ namespace ChessClock.SyncEngine
             }
         }
 
-        private TimeSpan autoSyncInterval = TimeSpan.FromMinutes(1);
-
-        public TimeSpan AutoSyncTriggerInterval
-        {
-            get
-            {
-                return autoSyncInterval;
-            }
-            set
-            {
-                if (value != autoSyncInterval)
-                {
-                    autoSyncInterval = value;
-                    FirePropertiesChanged(nameof(AutoSyncTriggerInterval));
-                }
-            }
-        }
-
         private IAutoSyncStrategy autoSyncStrategy = new DefaultAutoSyncStrategy();
         public IAutoSyncStrategy AutoSyncStrategy
         {
@@ -80,26 +62,22 @@ namespace ChessClock.SyncEngine
             }
         }
 
+        /// <summary>
+        /// The system player decides the perspective for the SyncEngine
+        /// </summary>
+        public Player SystemPlayer { get; private set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler<MyTurnEventArgs> MyTurn;
+        public event EventHandler<SuccessfullySyncedEventArgs> SuccessfullySynced;
 
         /// <summary>
-        /// Gets a given game
+        /// Initializes a sync engine for a system player
         /// </summary>
-        /// <param name="id">The Id of the Game</param>
-        /// <returns>The game</returns>
-        public Task<Game> GetGameAsync(Guid id)
+        /// <param name="player">The system player. This is the person from whose perspective we are syncing.</param>
+        public BaseSyncEngine(Player player)
         {
-            return Task.FromResult(CreateGameSource().First(g => g.Id.Equals(id)));
-        }
-
-        /// <summary>
-        /// Get all visible players
-        /// </summary>
-        /// <returns>An IEnumerable of all visible players</returns>
-        public Task<IEnumerable<Player>> GetPlayersAsync()
-        {
-            return Task.FromResult(CreatePlayerSource().ToArray().AsEnumerable());
+            SystemPlayer = player;
         }
 
         /// <summary>
@@ -126,17 +104,92 @@ namespace ChessClock.SyncEngine
             handler?.Invoke(this, args);
         }
 
-        protected abstract IQueryable<Game> CreateGameSource();
-        protected abstract IQueryable<Player> CreatePlayerSource();
+        /// <summary>
+        /// Fires the SuccessfullySynced Event
+        /// </summary>
+        /// <param name="args">Event arguments containing sync time and the game that was synced</param>
+        protected virtual void OnSuccesfullySynced(SuccessfullySyncedEventArgs args)
+        {
+            var handler = SuccessfullySynced;
+            handler?.Invoke(this, args);
+        }
+        
+        /// <summary>
+        /// Asynchronously gets all games that involve a given player
+        /// </summary>
+        /// <param name="player"></param>
+        /// <returns></returns>
+        public virtual Task<IEnumerable<Game>> GamesForAsync(Player player)
+        {
+            return Task.FromResult(CreateGameSource().Where(g => g.Players.Contains(player)).AsEnumerable());
+        }
+
+        /// <summary>
+        /// Gets a given game
+        /// </summary>
+        /// <param name="id">The Id of the Game</param>
+        /// <returns>The game</returns>
+        public Task<Game> GetGameAsync(Guid id)
+        {
+            return Task.FromResult(CreateGameSource().First(g => g.Id.Equals(id)));
+        }
+
+        /// <summary>
+        /// Get all visible players
+        /// </summary>
+        /// <returns>An IEnumerable of all visible players</returns>
+        public Task<IEnumerable<Player>> GetPlayersAsync()
+        {
+            return Task.FromResult(CreatePlayerSource().ToArray().AsEnumerable());
+        }
 
         /// <summary>
         /// Method is called when either AutoSync is toggled or the AutoSync strategy has been changed
         /// </summary>
         protected virtual void AutoSyncStrategyChanged()
         {
+            SuccessfullySynced = null;
+            SuccessfullySynced = autoSyncStrategy.GameSyncedSuccesfully;
 
+            if (autoSyncStrategy is DefaultAutoSyncStrategy)
+            {
+                var defaultSyncStrat = autoSyncStrategy as DefaultAutoSyncStrategy;
+                if (autoSyncIntervalTimer == null)
+                {
+                    autoSyncIntervalTimer = new Timer();
+                    autoSyncIntervalTimer.Stop();
+                }
+                
+            }
         }
 
-        public abstract Task SubmitTurn();
+        /// <summary>
+        /// This method is called when the AutoSync timer has ellapsed
+        /// </summary>
+        /// <remarks>This is not the only event through which an AutoSync event can occur</remarks>
+        protected virtual void AutoSyncTimerElapsed()
+        {
+            var gamesToCheck = GamesForAsync(SystemPlayer).GetAwaiter().GetResult().Where(g => autoSyncStrategy.ShouldSync(g));
+
+            foreach (var game in gamesToCheck)
+            {
+                Sync(game);
+            }
+        }
+
+        public virtual void Sync(Game game)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Orders the SyncEngine to submit the current turn for the given game
+        /// </summary>
+        /// <param name="game">The game to submit</param>
+        /// <returns>An awaitable task</returns>
+        public abstract Task SubmitTurnAsync(Game game);
+
+        protected abstract IQueryable<Game> CreateGameSource();
+        protected abstract IQueryable<Player> CreatePlayerSource();
     }
 }
