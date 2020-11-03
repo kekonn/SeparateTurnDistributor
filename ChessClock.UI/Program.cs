@@ -1,3 +1,4 @@
+using NLog;
 using System;
 using System.Windows.Forms;
 
@@ -20,6 +21,7 @@ namespace ChessClock.UI
             }
             catch (Exception e)
             {
+                LogManager.GetCurrentClassLogger().Error(e, "Uncaught exception");
                 MessageBox.Show(e.Message, "Exception has occured", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

@@ -36,8 +36,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.playerSeedTextBox = new System.Windows.Forms.TextBox();
             this.buttonPanel = new System.Windows.Forms.Panel();
-            this.createGameButton = new System.Windows.Forms.Button();
             this.addPlayerButton = new System.Windows.Forms.Button();
+            this.createGameButton = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.buttonPanel.SuspendLayout();
             this.SuspendLayout();
@@ -120,17 +120,6 @@
             this.buttonPanel.Size = new System.Drawing.Size(119, 408);
             this.buttonPanel.TabIndex = 6;
             // 
-            // createGameButton
-            // 
-            this.createGameButton.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.createGameButton.Location = new System.Drawing.Point(0, 385);
-            this.createGameButton.Name = "createGameButton";
-            this.createGameButton.Size = new System.Drawing.Size(119, 23);
-            this.createGameButton.TabIndex = 0;
-            this.createGameButton.Text = "Create Game";
-            this.createGameButton.UseVisualStyleBackColor = true;
-            this.createGameButton.Click += new System.EventHandler(this.createGameButton_Click);
-            // 
             // addPlayerButton
             // 
             this.addPlayerButton.Dock = System.Windows.Forms.DockStyle.Top;
@@ -141,6 +130,17 @@
             this.addPlayerButton.Text = "Add Player";
             this.addPlayerButton.UseVisualStyleBackColor = true;
             this.addPlayerButton.Click += new System.EventHandler(this.addPlayerButton_Click);
+            // 
+            // createGameButton
+            // 
+            this.createGameButton.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.createGameButton.Location = new System.Drawing.Point(0, 385);
+            this.createGameButton.Name = "createGameButton";
+            this.createGameButton.Size = new System.Drawing.Size(119, 23);
+            this.createGameButton.TabIndex = 0;
+            this.createGameButton.Text = "Create Game";
+            this.createGameButton.UseVisualStyleBackColor = true;
+            this.createGameButton.Click += new System.EventHandler(this.createGameButton_Click);
             // 
             // NewGameWindow
             // 

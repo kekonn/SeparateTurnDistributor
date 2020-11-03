@@ -85,7 +85,6 @@
             this.Name = "PlayerNameForm";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
-            this.Text = "PlayerNameForm";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.PlayerNameForm_FormClosing);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();

@@ -29,6 +29,7 @@ namespace ChessClock.UI
         public GameSyncControl()
         {
             InitializeComponent();
+            UpdateToggleText();
         }
 
         public GameSyncControl(GameViewModel viewModel) : this()
@@ -86,6 +87,19 @@ namespace ChessClock.UI
             }
 
             viewModel.Update();
+        }
+
+        private void autoSyncToggle_Click(object sender, EventArgs e)
+        {
+            var timerEnabled = !updateTimer.Enabled;
+            updateTimer.Enabled = timerEnabled;
+
+            UpdateToggleText();
+        }
+
+        private void UpdateToggleText()
+        {
+            autoSyncToggle.Text = string.Format(autoSyncToggle.Tag.ToString(), updateTimer.Enabled ? "Disable" : "Enable");
         }
     }
 }

@@ -156,8 +156,7 @@ namespace ChessClock.UI
 
             Logger.Debug($"Detected write to {fileName}");
 
-            var baseTime = File.GetLastWriteTimeUtc(fileName);
-            var lastWrite = new DateTimeOffset(baseTime, TimeZoneInfo.Local.GetUtcOffset(baseTime));
+            var lastWrite = Filesystem.GetSaveFileLastWrite(game, Settings.Default.HotSeatFolder);
 
             game.LastUpdated = lastWrite;
 

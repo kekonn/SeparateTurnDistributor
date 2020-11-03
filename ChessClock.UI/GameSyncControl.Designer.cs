@@ -46,6 +46,8 @@ namespace ChessClock.UI
             this.lastFileModifiedLabel = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.currentPlayerLabel = new System.Windows.Forms.Label();
+            this.saveButtonsPanel = new System.Windows.Forms.Panel();
+            this.autoSyncToggle = new System.Windows.Forms.Button();
             this.selectSaveFileButton = new System.Windows.Forms.Button();
             this.updateTimer = new System.Windows.Forms.Timer(this.components);
             this.saveFileDialog = new System.Windows.Forms.OpenFileDialog();
@@ -54,6 +56,7 @@ namespace ChessClock.UI
             this.gameTabControl.SuspendLayout();
             this.syncTabPage.SuspendLayout();
             this.syncTabTableLayout.SuspendLayout();
+            this.saveButtonsPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainLayoutPanel
@@ -171,7 +174,7 @@ namespace ChessClock.UI
             this.syncTabTableLayout.Controls.Add(this.lastFileModifiedLabel, 1, 1);
             this.syncTabTableLayout.Controls.Add(this.label4, 0, 2);
             this.syncTabTableLayout.Controls.Add(this.currentPlayerLabel, 1, 2);
-            this.syncTabTableLayout.Controls.Add(this.selectSaveFileButton, 1, 3);
+            this.syncTabTableLayout.Controls.Add(this.saveButtonsPanel, 0, 3);
             this.syncTabTableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
             this.syncTabTableLayout.Location = new System.Drawing.Point(3, 3);
             this.syncTabTableLayout.Name = "syncTabTableLayout";
@@ -245,11 +248,34 @@ namespace ChessClock.UI
             this.currentPlayerLabel.TabIndex = 5;
             this.currentPlayerLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // saveButtonsPanel
+            // 
+            this.saveButtonsPanel.Controls.Add(this.autoSyncToggle);
+            this.saveButtonsPanel.Controls.Add(this.selectSaveFileButton);
+            this.saveButtonsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.saveButtonsPanel.Location = new System.Drawing.Point(3, 68);
+            this.saveButtonsPanel.Name = "saveButtonsPanel";
+            this.saveButtonsPanel.Size = new System.Drawing.Size(90, 300);
+            this.saveButtonsPanel.TabIndex = 7;
+            // 
+            // autoSyncToggle
+            // 
+            this.autoSyncToggle.Dock = System.Windows.Forms.DockStyle.Top;
+            this.autoSyncToggle.Location = new System.Drawing.Point(0, 23);
+            this.autoSyncToggle.Name = "autoSyncToggle";
+            this.autoSyncToggle.Size = new System.Drawing.Size(90, 43);
+            this.autoSyncToggle.TabIndex = 7;
+            this.autoSyncToggle.Tag = "{0} AutoSync";
+            this.autoSyncToggle.Text = "Enable/Disable";
+            this.autoSyncToggle.UseVisualStyleBackColor = true;
+            this.autoSyncToggle.Click += new System.EventHandler(this.autoSyncToggle_Click);
+            // 
             // selectSaveFileButton
             // 
-            this.selectSaveFileButton.Location = new System.Drawing.Point(99, 68);
+            this.selectSaveFileButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.selectSaveFileButton.Location = new System.Drawing.Point(0, 0);
             this.selectSaveFileButton.Name = "selectSaveFileButton";
-            this.selectSaveFileButton.Size = new System.Drawing.Size(108, 23);
+            this.selectSaveFileButton.Size = new System.Drawing.Size(90, 23);
             this.selectSaveFileButton.TabIndex = 6;
             this.selectSaveFileButton.Text = "Select Save File";
             this.selectSaveFileButton.UseVisualStyleBackColor = true;
@@ -257,6 +283,7 @@ namespace ChessClock.UI
             // 
             // updateTimer
             // 
+            this.updateTimer.Enabled = true;
             this.updateTimer.Interval = 60000;
             this.updateTimer.Tick += new System.EventHandler(this.updateTimer_Tick);
             // 
@@ -280,6 +307,7 @@ namespace ChessClock.UI
             this.syncTabPage.ResumeLayout(false);
             this.syncTabTableLayout.ResumeLayout(false);
             this.syncTabTableLayout.PerformLayout();
+            this.saveButtonsPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -305,5 +333,7 @@ namespace ChessClock.UI
         private System.Windows.Forms.Timer updateTimer;
         private System.Windows.Forms.OpenFileDialog saveFileDialog;
         private System.Windows.Forms.Button selectSaveFileButton;
+        private System.Windows.Forms.Panel saveButtonsPanel;
+        private System.Windows.Forms.Button autoSyncToggle;
     }
 }
