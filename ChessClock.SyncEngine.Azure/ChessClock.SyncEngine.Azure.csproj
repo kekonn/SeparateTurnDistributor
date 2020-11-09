@@ -1,0 +1,11 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <UserSecretsId>67beb66c-60ef-43e8-90be-f67b55317ba3</UserSecretsId>
+    <Authors>Jonas Van der Aa</Authors>
+    <Product>ChessClock Azure SyncEngine</Product>
+    <ApplicationIcon>hotseat.ico</ApplicationIcon>
+  </PropertyGroup>
+
+</Project>
