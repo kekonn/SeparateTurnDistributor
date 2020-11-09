@@ -1,7 +1,6 @@
 ﻿using ChessClock.Model;
 using ChessClock.SyncEngine.Events;
-using System;
-using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace ChessClock.SyncEngine
 {
