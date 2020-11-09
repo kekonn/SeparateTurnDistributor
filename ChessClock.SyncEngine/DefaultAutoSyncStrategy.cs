@@ -13,6 +13,11 @@ namespace ChessClock.SyncEngine
 
         private Dictionary<Game, DateTimeOffset> lastSyncedTimes = new Dictionary<Game, DateTimeOffset>();
 
+        /// <summary>
+        /// Event handler for when the game was synced successfully.
+        /// </summary>
+        /// <param name="sender">the sender of the event</param>
+        /// <param name="e">Event arguments</param>
         public virtual void GameSyncedSuccesfully(object sender, SuccessfullySyncedEventArgs e)
         {
             var syncTime = e.SyncTime;

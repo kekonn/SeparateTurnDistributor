@@ -14,6 +14,9 @@ namespace ChessClock.SyncEngine
         private Timer autoSyncIntervalTimer;
 
         private bool autoSync = true;
+        /// <summary>
+        /// AutoSync sets if the server is allowed to check for new turns automatically
+        /// </summary>
         public bool AutoSync
         {
             get
@@ -32,6 +35,9 @@ namespace ChessClock.SyncEngine
         }
 
         public bool autoSubmit = false;
+        /// <summary>
+        /// AutoSubmit decides if you want to automatically submit your turn on a file change trigger
+        /// </summary
         public bool AutoSubmit
         {
             get
@@ -49,6 +55,9 @@ namespace ChessClock.SyncEngine
         }
 
         private IAutoSyncStrategy autoSyncStrategy = new DefaultAutoSyncStrategy();
+        /// <summary>
+        /// Sets the AutoSync strategy
+        /// </summary>
         public IAutoSyncStrategy AutoSyncStrategy
         {
             get => autoSyncStrategy;
@@ -151,6 +160,7 @@ namespace ChessClock.SyncEngine
             SuccessfullySynced = null;
             SuccessfullySynced = autoSyncStrategy.GameSyncedSuccesfully;
 
+
             if (autoSyncStrategy is DefaultAutoSyncStrategy)
             {
                 var defaultSyncStrat = autoSyncStrategy as DefaultAutoSyncStrategy;
@@ -158,6 +168,13 @@ namespace ChessClock.SyncEngine
                 {
                     autoSyncIntervalTimer = new Timer();
                     autoSyncIntervalTimer.Stop();
+                    autoSyncIntervalTimer.Interval = defaultSyncStrat.MinimumInterval.TotalMilliseconds;
+                    autoSyncIntervalTimer.Start();
+                } else
+                {
+                    autoSyncIntervalTimer.Stop();
+                    autoSyncIntervalTimer.Interval = defaultSyncStrat.MinimumInterval.TotalMilliseconds;
+                    autoSyncIntervalTimer.Start();
                 }
                 
             }
