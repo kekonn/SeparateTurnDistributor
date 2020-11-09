@@ -5,7 +5,7 @@ using System;
 
 namespace ChessClock.Data
 {
-    public static class Filesystem
+    public static class Civ6Filesystem
     {
         private const string DefaultSavePath = @"%USERPROFILE%\Documents\My Games\Sid Meier's Civilization VI\Saves\Hotseat\";
         private const string SaveExtension = ".Civ6Save";
