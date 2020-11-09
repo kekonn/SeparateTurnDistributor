@@ -9,7 +9,7 @@ using System.Timers;
 
 namespace ChessClock.SyncEngine
 {
-    public abstract class BaseSyncEngine : ISyncEngine, INotifyPropertyChanged
+    public abstract class BaseSyncEngine : ISyncEngine
     {
         private Timer autoSyncIntervalTimer;
 
@@ -177,19 +177,66 @@ namespace ChessClock.SyncEngine
             }
         }
 
-        public virtual void Sync(Game game)
+        /// <summary>
+        /// Sync all known games
+        /// </summary>
+        /// <returns>An awaitable task</returns>
+        public virtual async Task Sync()
         {
-            throw new NotImplementedException();
+            var games = await GamesForAsync(SystemPlayer);
+            foreach (var game in games)
+            {
+                Sync(game);
+            }
         }
 
         /// <summary>
-        /// Orders the SyncEngine to submit the current turn for the given game
+        /// Syncs the given game
+        /// </summary>
+        /// <param name="game">The game to sync</param>
+        protected abstract void Sync(Game game);
+
+        /// <summary>
+        /// Submits the turn for the given game
         /// </summary>
         /// <param name="game">The game to submit</param>
         /// <returns>An awaitable task</returns>
         public abstract Task SubmitTurnAsync(Game game);
 
+        /// <summary>
+        /// Passes the turn to the next player, without uploading the save game
+        /// </summary>
+        /// <param name="game">The game for which to pass a turn</param>
+        /// <returns>An awaitable task</returns>
+        public abstract Task PassTurnAsync(Game game);
+
+        /// <summary>
+        /// Creates a queryable source of games.
+        /// </summary>
+        /// <remarks>Lazy loading is preferred</remarks>
+        /// <returns>Queryable enumeration of games</returns>
         protected abstract IQueryable<Game> CreateGameSource();
+
+        /// <summary>
+        /// Creates a queryable source of players
+        /// </summary>
+        /// <remarks>Lazy loading is preferred</remarks>
+        /// <returns>Queryable enumeration of players</returns>
         protected abstract IQueryable<Player> CreatePlayerSource();
+
+        /// <summary>
+        /// Retrieve the last modificiation time as shown by the server.
+        /// </summary>
+        /// <param name="game">The game which's modification time should be checked</param>
+        /// <returns>A DateTimeOffset for the last modified time</returns>
+        protected abstract DateTimeOffset GetGameLastModifiedTime(Game game);
+
+        /// <summary>
+        /// Gets the latest modification time for the remote save game.
+        /// </summary>
+        /// <param name="game">The game which's save file to check</param>
+        /// <returns>A DateTimeOffset for the last modified time</returns>
+        protected abstract DateTimeOffset GetRemoteSavefileLastModifiedTime(Game game);
+        
     }
 }
