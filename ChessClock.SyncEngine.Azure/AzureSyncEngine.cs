@@ -6,6 +6,7 @@ using Microsoft.Azure.Cosmos.Table;
 using Microsoft.Azure.Cosmos.Table.Queryable;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,7 +15,7 @@ namespace ChessClock.SyncEngine.Azure
 {
     public class AzureSyncEngine : BaseSyncEngine
     {
-        private static readonly string[] ColumnKeys = new string[] { "Name", "Players", "CurrentPlayer", "SavefileName" };
+        private static readonly string[] ColumnKeys = { "Name", "Players", "CurrentPlayer", "SavefileName" };
 
         private readonly string connectionString;
         private readonly CloudStorageAccount cloudStorageAccount;
@@ -57,7 +58,9 @@ namespace ChessClock.SyncEngine.Azure
 
         protected override DateTimeOffset GetGameLastModifiedTime(Game game)
         {
-            throw new NotImplementedException();
+            var fullPath = GetFullSavefilePath(game);
+
+            return File.GetLastWriteTimeUtc(fullPath);
         }
 
         protected override DateTimeOffset GetRemoteSavefileLastModifiedTime(Game game)
@@ -106,6 +109,18 @@ namespace ChessClock.SyncEngine.Azure
             var insert = TableOperation.InsertOrMerge(new AzureCiv6GameEntity(game));
 
             var result = await gamesTable.ExecuteAsync(insert);
+        }
+
+        private ValueTask UploadSavefile(Game game)
+        {
+            var filePath = GetFullSavefilePath(game);
+
+            throw new NotImplementedException();
+        }
+
+        private string GetFullSavefilePath(Game game)
+        {
+            throw new NotImplementedException();
         }
     }
 }
