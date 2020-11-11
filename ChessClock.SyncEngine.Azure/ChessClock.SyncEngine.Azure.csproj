@@ -6,6 +6,7 @@
     <Authors>Jonas Van der Aa</Authors>
     <Product>ChessClock Azure SyncEngine</Product>
     <ApplicationIcon>hotseat.ico</ApplicationIcon>
+    <LangVersion>9.0</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
