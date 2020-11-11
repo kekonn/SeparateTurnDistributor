@@ -54,7 +54,7 @@ namespace ChessClock.Model
                 throw new ArgumentException("A game must contain at least 2 players");
             }
 
-            currentPlayer = currentPlayer ?? players.First();
+            currentPlayer ??= Players.First();
 
             if (!Players.Contains(currentPlayer))
             {
