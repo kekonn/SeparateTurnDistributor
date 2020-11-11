@@ -7,6 +7,7 @@ using Microsoft.Azure.Cosmos.Table.Queryable;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ChessClock.SyncEngine.Azure
@@ -27,14 +28,21 @@ namespace ChessClock.SyncEngine.Azure
             tableName = options.TableName;
             cloudStorageAccount = CloudStorageAccount.Parse(connectionString);
             tableClient = cloudStorageAccount.CreateCloudTableClient(new TableClientConfiguration());
+            containerName = options.ContainerName;
         }
 
-        public override Task PassTurnAsync(Game game)
+        public override async Task PassTurnAsync(Game game)
+        {
+            game.NextTurn();
+            await InsertOrMergeGame(game);
+        }
+
+        public override Task SubmitTurnAsync(Game game)
         {
             throw new NotImplementedException();
         }
 
-        public override Task SubmitTurnAsync(Game game)
+        protected override void Sync(Game game)
         {
             throw new NotImplementedException();
         }
@@ -45,11 +53,6 @@ namespace ChessClock.SyncEngine.Azure
                 .Resolve(Resolve);
 
             return query;
-        }
-
-        protected override IQueryable<Player> CreatePlayerSource()
-        {
-            throw new NotImplementedException();
         }
 
         protected override DateTimeOffset GetGameLastModifiedTime(Game game)
@@ -63,11 +66,6 @@ namespace ChessClock.SyncEngine.Azure
             var properties = blobClient.GetProperties();
 
             return properties.Value.LastModified;
-        }
-
-        protected override void Sync(Game game)
-        {
-            throw new NotImplementedException();
         }
 
         private Game Resolve(string pk, string rk, DateTimeOffset ts, IDictionary<string, EntityProperty> props, string etag)
@@ -99,5 +97,15 @@ namespace ChessClock.SyncEngine.Azure
         }
 
         private BlobClient CreateBlobClientForGame(Game game) => new BlobClient(connectionString, containerName, Civ6Filesystem.GetSaveFileName(game));
+
+        private async Task InsertOrMergeGame(Game game)
+        {
+            var gamesTable = tableClient.GetTableReference(tableName);
+            await gamesTable.CreateIfNotExistsAsync();
+
+            var insert = TableOperation.InsertOrMerge(new AzureCiv6GameEntity(game));
+
+            var result = await gamesTable.ExecuteAsync(insert);
+        }
     }
 }
