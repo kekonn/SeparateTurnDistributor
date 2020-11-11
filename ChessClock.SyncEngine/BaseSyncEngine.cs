@@ -152,22 +152,19 @@ namespace ChessClock.SyncEngine
             SuccessfullySynced = autoSyncStrategy.GameSyncedSuccesfully;
 
 
-            if (autoSyncStrategy is DefaultAutoSyncStrategy)
+            if (!(autoSyncStrategy is DefaultAutoSyncStrategy defaultSyncStrat)) return;
+
+            if (autoSyncIntervalTimer == null)
             {
-                var defaultSyncStrat = autoSyncStrategy as DefaultAutoSyncStrategy;
-                if (autoSyncIntervalTimer == null)
-                {
-                    autoSyncIntervalTimer = new Timer();
-                    autoSyncIntervalTimer.Stop();
-                    autoSyncIntervalTimer.Interval = defaultSyncStrat.MinimumInterval.TotalMilliseconds;
-                    autoSyncIntervalTimer.Start();
-                } else
-                {
-                    autoSyncIntervalTimer.Stop();
-                    autoSyncIntervalTimer.Interval = defaultSyncStrat.MinimumInterval.TotalMilliseconds;
-                    autoSyncIntervalTimer.Start();
-                }
-                
+                autoSyncIntervalTimer = new Timer();
+                autoSyncIntervalTimer.Stop();
+                autoSyncIntervalTimer.Interval = defaultSyncStrat.MinimumInterval.TotalMilliseconds;
+                autoSyncIntervalTimer.Start();
+            } else
+            {
+                autoSyncIntervalTimer.Stop();
+                autoSyncIntervalTimer.Interval = defaultSyncStrat.MinimumInterval.TotalMilliseconds;
+                autoSyncIntervalTimer.Start();
             }
         }
 
