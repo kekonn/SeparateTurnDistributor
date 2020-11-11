@@ -108,7 +108,7 @@ namespace ChessClock.SyncEngine
         /// Fires the SuccessfullySynced Event
         /// </summary>
         /// <param name="args">Event arguments containing sync time and the game that was synced</param>
-        protected virtual void OnSuccesfullySynced(SuccessfullySyncedEventArgs args)
+        protected virtual void OnSuccessfullySynced(SuccessfullySyncedEventArgs args)
         {
             var handler = SuccessfullySynced;
             handler?.Invoke(this, args);
@@ -172,7 +172,7 @@ namespace ChessClock.SyncEngine
         }
 
         /// <summary>
-        /// This method is called when the AutoSync timer has ellapsed
+        /// This method is called when the AutoSync timer has elapsed
         /// </summary>
         /// <remarks>This is not the only event through which an AutoSync event can occur</remarks>
         protected virtual void AutoSyncTimerElapsed()
@@ -192,10 +192,11 @@ namespace ChessClock.SyncEngine
         public virtual async ValueTask Sync()
         {
             var games = await GamesForAsync(SystemPlayer);
-            foreach (var game in games)
-            {
-                Sync(game);
-            }
+
+            var syncTasks = games.Where(g => autoSyncStrategy.ShouldSync(g))
+                .Select(g => Task.Run(() => Sync(g))).ToArray();
+
+            Task.WaitAll(syncTasks);
         }
 
         /// <summary>
@@ -236,16 +237,16 @@ namespace ChessClock.SyncEngine
         }
 
         /// <summary>
-        /// Retrieve the last modificiation time as shown by the server.
+        /// Retrieve the last modification time as shown by the server.
         /// </summary>
-        /// <param name="game">The game which's modification time should be checked</param>
+        /// <param name="game">Which game's modification time to check</param>
         /// <returns>A DateTimeOffset for the last modified time</returns>
         protected abstract DateTimeOffset GetGameLastModifiedTime(Game game);
 
         /// <summary>
         /// Gets the latest modification time for the remote save game.
         /// </summary>
-        /// <param name="game">The game which's save file to check</param>
+        /// <param name="game">Which game's save file to check</param>
         /// <returns>A DateTimeOffset for the last modified time</returns>
         protected abstract DateTimeOffset GetRemoteSavefileLastModifiedTime(Game game);
         
