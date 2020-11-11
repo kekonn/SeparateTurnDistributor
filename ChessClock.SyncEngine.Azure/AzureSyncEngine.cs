@@ -79,8 +79,7 @@ namespace ChessClock.SyncEngine.Azure
                 return new Game();
             }
 
-            Guid id;
-            Guid.TryParse(rk, out id);
+            Guid.TryParse(rk, out var id);
 
             var name = props[ColumnKeys[0]].StringValue;
             var playersJson = props[ColumnKeys[1]].StringValue;
