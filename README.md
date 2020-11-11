@@ -1,8 +1,8 @@
 # Separate Turn Distributor
 
-Separate Turn Distributor (or STD for short) is a project that was born out of frustration with Civilization VI's (lack of working) Play by Cloud functionality. 
+Separate Turn Distributor is a project that was born out of frustration with Civilization VI's (lack of working) Play by Cloud functionality. 
 
-Providing that you provide your own back end, you can use this tool to "automatically" exchange hot seat save files between different players.
+Providing that you provide your own back end, you can use this tool to "automatically" exchange hot seat save files between different players. An Azure backend will be supplied so you can plug in an Azure Storage connection string.
 
 ## Attributions
 
