@@ -20,8 +20,8 @@ namespace ChessClock.SyncEngine
         Task<IEnumerable<Game>> GamesForAsync(Player player);
         Task<Game> GetGameAsync(Guid id);
         Task<IEnumerable<Player>> GetPlayersAsync();
-        Task PassTurnAsync(Game game);
-        Task SubmitTurnAsync(Game game);
-        Task Sync();
+        ValueTask PassTurnAsync(Game game);
+        ValueTask SubmitTurnAsync(Game game);
+        ValueTask Sync();
     }
 }

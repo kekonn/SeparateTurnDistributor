@@ -189,7 +189,7 @@ namespace ChessClock.SyncEngine
         /// Sync all known games
         /// </summary>
         /// <returns>An awaitable task</returns>
-        public virtual async Task Sync()
+        public virtual async ValueTask Sync()
         {
             var games = await GamesForAsync(SystemPlayer);
             foreach (var game in games)
@@ -209,14 +209,14 @@ namespace ChessClock.SyncEngine
         /// </summary>
         /// <param name="game">The game to submit</param>
         /// <returns>An awaitable task</returns>
-        public abstract Task SubmitTurnAsync(Game game);
+        public abstract ValueTask SubmitTurnAsync(Game game);
 
         /// <summary>
         /// Passes the turn to the next player, without uploading the save game
         /// </summary>
         /// <param name="game">The game for which to pass a turn</param>
         /// <returns>An awaitable task</returns>
-        public abstract Task PassTurnAsync(Game game);
+        public abstract ValueTask PassTurnAsync(Game game);
 
         /// <summary>
         /// Creates a queryable source of games.

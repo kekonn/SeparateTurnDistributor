@@ -31,13 +31,13 @@ namespace ChessClock.SyncEngine.Azure
             containerName = options.ContainerName;
         }
 
-        public override async Task PassTurnAsync(Game game)
+        public override async ValueTask PassTurnAsync(Game game)
         {
             game.NextTurn();
             await InsertOrMergeGame(game);
         }
 
-        public override Task SubmitTurnAsync(Game game)
+        public override ValueTask SubmitTurnAsync(Game game)
         {
             throw new NotImplementedException();
         }
@@ -98,7 +98,7 @@ namespace ChessClock.SyncEngine.Azure
 
         private BlobClient CreateBlobClientForGame(Game game) => new BlobClient(connectionString, containerName, Civ6Filesystem.GetSaveFileName(game));
 
-        private async Task InsertOrMergeGame(Game game)
+        private async ValueTask InsertOrMergeGame(Game game)
         {
             var gamesTable = tableClient.GetTableReference(tableName);
             await gamesTable.CreateIfNotExistsAsync();
