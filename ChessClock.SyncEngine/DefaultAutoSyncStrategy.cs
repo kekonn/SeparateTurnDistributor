@@ -9,21 +9,21 @@ namespace ChessClock.SyncEngine
     {
         internal TimeSpan MinimumInterval { get; private set; } = TimeSpan.FromMinutes(1);
 
-        private static object lockObject = new object();
+        private static readonly object LockObject = new object();
 
-        private Dictionary<Game, DateTimeOffset> lastSyncedTimes = new Dictionary<Game, DateTimeOffset>();
+        private readonly Dictionary<Game, DateTimeOffset> lastSyncedTimes = new Dictionary<Game, DateTimeOffset>();
 
         /// <summary>
         /// Event handler for when the game was synced successfully.
         /// </summary>
         /// <param name="sender">the sender of the event</param>
         /// <param name="e">Event arguments</param>
-        public virtual void GameSyncedSuccesfully(object sender, SuccessfullySyncedEventArgs e)
+        public void GameSyncedSuccesfully(object sender, SuccessfullySyncedEventArgs e)
         {
             var syncTime = e.SyncTime;
             var game = e.Game;
 
-            lock (lockObject)
+            lock (LockObject)
             {
                 if (lastSyncedTimes.ContainsKey(game))
                 {
@@ -42,9 +42,9 @@ namespace ChessClock.SyncEngine
         /// <param name="game">the game to perform the check on</param>
         /// <returns>True if the game should sync, false if otherwise</returns>
         /// <remarks>This method is thread safe because it locks before changing internal state.</remarks>
-        public virtual bool ShouldSync(Game game)
+        public bool ShouldSync(Game game)
         {
-            lock (lockObject)
+            lock (LockObject)
             {
                 var isKnown = lastSyncedTimes.ContainsKey(game);
                 if (!isKnown)
