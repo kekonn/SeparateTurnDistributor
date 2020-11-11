@@ -19,38 +19,30 @@ namespace ChessClock.SyncEngine
         /// </summary>
         public bool AutoSync
         {
-            get
-            {
-                return autoSync;
-            }
+            get => autoSync;
             set
             {
-                if (value != autoSync)
-                {
-                    autoSync = value;
-                    FirePropertiesChanged(nameof(AutoSync));
-                    AutoSyncStrategyChanged();
-                }
+                if (value == autoSync) return;
+
+                autoSync = value;
+                FirePropertiesChanged(nameof(AutoSync));
+                AutoSyncStrategyChanged();
             }
         }
 
-        public bool autoSubmit = false;
+        private bool autoSubmit = false;
         /// <summary>
         /// AutoSubmit decides if you want to automatically submit your turn on a file change trigger
         /// </summary
         public bool AutoSubmit
         {
-            get
-            {
-                return autoSubmit;
-            }
+            get => autoSubmit;
             set
             {
-                if (value != autoSubmit)
-                {
-                    autoSubmit = value;
-                    FirePropertiesChanged(nameof(AutoSubmit));
-                }
+                if (value == autoSubmit) return;
+
+                autoSubmit = value;
+                FirePropertiesChanged(nameof(AutoSubmit));
             }
         }
 
@@ -62,12 +54,11 @@ namespace ChessClock.SyncEngine
         {
             get => autoSyncStrategy;
             set
-            { 
-                if (autoSyncStrategy != value)
-                {
-                    autoSyncStrategy = value;
-                    AutoSyncStrategyChanged();
-                }
+            {
+                if (autoSyncStrategy == value) return;
+
+                autoSyncStrategy = value;
+                AutoSyncStrategyChanged();
             }
         }
 
@@ -84,7 +75,7 @@ namespace ChessClock.SyncEngine
         /// Initializes a sync engine for a system player
         /// </summary>
         /// <param name="player">The system player. This is the person from whose perspective we are syncing.</param>
-        public BaseSyncEngine(Player player)
+        protected BaseSyncEngine(Player player)
         {
             SystemPlayer = player;
         }
@@ -239,7 +230,10 @@ namespace ChessClock.SyncEngine
         /// </summary>
         /// <remarks>Lazy loading is preferred</remarks>
         /// <returns>Queryable enumeration of players</returns>
-        protected abstract IQueryable<Player> CreatePlayerSource();
+        protected virtual IQueryable<Player> CreatePlayerSource()
+        {
+            return CreateGameSource().SelectMany(g => g.Players).Distinct();
+        }
 
         /// <summary>
         /// Retrieve the last modificiation time as shown by the server.
