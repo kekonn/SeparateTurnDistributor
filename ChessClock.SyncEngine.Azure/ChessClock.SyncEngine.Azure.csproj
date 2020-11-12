@@ -7,6 +7,7 @@
     <Product>ChessClock Azure SyncEngine</Product>
     <ApplicationIcon>hotseat.ico</ApplicationIcon>
     <LangVersion>9.0</LangVersion>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

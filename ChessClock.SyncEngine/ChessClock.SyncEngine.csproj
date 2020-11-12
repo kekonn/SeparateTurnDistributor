@@ -10,6 +10,7 @@
     <PackageLicenseExpression>https://github.com/kekonn/SeparateTurnDistributor/blob/main/LICENSE</PackageLicenseExpression>
     <NeutralLanguage>en-150</NeutralLanguage>
     <LangVersion>9.0</LangVersion>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
