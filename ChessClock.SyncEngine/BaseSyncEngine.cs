@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
+using Microsoft.Extensions.Logging;
 
 namespace ChessClock.SyncEngine
 {
@@ -62,6 +63,8 @@ namespace ChessClock.SyncEngine
             }
         }
 
+        protected readonly ILogger<BaseSyncEngine> Logger;
+
         /// <summary>
         /// The system player decides the perspective for the SyncEngine
         /// </summary>
@@ -76,10 +79,12 @@ namespace ChessClock.SyncEngine
         /// </summary>
         /// <param name="player">The system player. This is the person from whose perspective we are syncing.</param>
         /// <param name="autoSyncStrategy">The IAutoSync strategy to use, can always be changed later through the property</param>
-        protected BaseSyncEngine(Player player, IAutoSyncStrategy? autoSyncStrategy)
+        /// <param name="logger">The logger to use</param>
+        protected BaseSyncEngine(Player player, IAutoSyncStrategy? autoSyncStrategy, ILogger<BaseSyncEngine> logger)
         {
             SystemPlayer = player;
-            AutoSyncStrategy = autoSyncStrategy ?? new DefaultAutoSyncStrategy(SystemPlayer);
+            this.autoSyncStrategy = autoSyncStrategy ?? new DefaultAutoSyncStrategy(SystemPlayer);
+            Logger = logger;
         }
 
         /// <summary>
