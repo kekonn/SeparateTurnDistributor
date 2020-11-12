@@ -1,9 +1,9 @@
-﻿using System.IO;
+﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using ChessClock.Model;
-using System;
 
-namespace ChessClock.Data
+namespace ChessClock.SyncEngine
 {
     public static class Civ6Filesystem
     {
@@ -27,7 +27,7 @@ namespace ChessClock.Data
         /// <returns>The filename, NOT the full path</returns>
         public static string GetSaveFileName(Game game) => $"{game.SavefileName}{SaveExtension}";
 
-        public static string GetHotSeatSaveFileFullName(string directory, string savefileName)
+        private static string GetHotSeatSaveFileFullName(string directory, string savefileName)
         {
             var fileName = Path.GetFileNameWithoutExtension(savefileName) + SaveExtension;
             return Path.GetFullPath(Path.Combine(directory, fileName));
