@@ -246,5 +246,11 @@ namespace ChessClock.SyncEngine
         /// <returns>A DateTimeOffset for the last modified time</returns>
         protected abstract DateTimeOffset GetRemoteSavefileLastModifiedTime(Game game);
 
+        /// <summary>
+        /// Gets the latest modification time for the local save game.
+        /// </summary>
+        /// <param name="game">Which game's save file to check</param>
+        /// <returns>A DateTimeOffset for the last modified time</returns>
+        protected abstract DateTimeOffset GetLocalSavefileLastModifiedTime(Game game);
     }
 }
