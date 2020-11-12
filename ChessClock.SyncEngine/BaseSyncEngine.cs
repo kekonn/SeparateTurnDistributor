@@ -151,7 +151,7 @@ namespace ChessClock.SyncEngine
         protected virtual void AutoSyncStrategyChanged()
         {
             SuccessfullySynced = null;
-            SuccessfullySynced = autoSyncStrategy.GameSyncedSuccesfully;
+            SuccessfullySynced = autoSyncStrategy.GameSyncedSuccessfully;
 
 
             if (!(autoSyncStrategy is DefaultAutoSyncStrategy defaultSyncStrat)) return;

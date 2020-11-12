@@ -18,7 +18,7 @@ namespace ChessClock.SyncEngine
         /// </summary>
         /// <param name="sender">the sender of the event</param>
         /// <param name="e">Event arguments</param>
-        public void GameSyncedSuccesfully(object sender, SuccessfullySyncedEventArgs e)
+        public void GameSyncedSuccessfully(object sender, SuccessfullySyncedEventArgs e)
         {
             var syncTime = e.SyncTime;
             var game = e.Game;

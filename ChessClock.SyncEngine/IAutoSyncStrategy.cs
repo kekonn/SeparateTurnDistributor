@@ -6,7 +6,7 @@ namespace ChessClock.SyncEngine
 {
     public interface IAutoSyncStrategy
     {
-        void GameSyncedSuccesfully(object sender, SuccessfullySyncedEventArgs e);
+        void GameSyncedSuccessfully(object sender, SuccessfullySyncedEventArgs e);
         bool ShouldSync(Game game);
     }
 }
