@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace ChessClock.Model
 {
-    public class Game
+    public class Game : IEquatable<Game>
     {
         /// <summary>
         /// Unique Game Id
@@ -83,8 +83,10 @@ namespace ChessClock.Model
 
         public override bool Equals(object obj)
         {
-            return obj is Game game &&
-                   Id.Equals(game.Id);
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((Game) obj);
         }
 
         public static bool operator ==(Game left, Game right)
@@ -95,6 +97,18 @@ namespace ChessClock.Model
         public static bool operator !=(Game left, Game right)
         {
             return !(left == right);
+        }
+
+        public bool Equals(Game? other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return Id.Equals(other.Id) && Name == other.Name && Players.Equals(other.Players) && CurrentPlayer.Equals(other.CurrentPlayer) && SavefileName == other.SavefileName && LastUpdated.Equals(other.LastUpdated);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Id, Name, Players, CurrentPlayer, SavefileName, LastUpdated);
         }
     }
 }
