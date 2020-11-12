@@ -11,7 +11,7 @@ namespace ChessClock.SyncEngine
 {
     public abstract class BaseSyncEngine : ISyncEngine
     {
-        private Timer autoSyncIntervalTimer;
+        private Timer? autoSyncIntervalTimer;
 
         private bool autoSync = true;
         /// <summary>
@@ -46,7 +46,7 @@ namespace ChessClock.SyncEngine
             }
         }
 
-        private IAutoSyncStrategy autoSyncStrategy = new DefaultAutoSyncStrategy();
+        private IAutoSyncStrategy autoSyncStrategy;
         /// <summary>
         /// Sets the AutoSync strategy
         /// </summary>
@@ -67,17 +67,19 @@ namespace ChessClock.SyncEngine
         /// </summary>
         public Player SystemPlayer { get; private set; }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        public event EventHandler<MyTurnEventArgs> MyTurn;
-        public event EventHandler<SuccessfullySyncedEventArgs> SuccessfullySynced;
+        public event PropertyChangedEventHandler? PropertyChanged = null;
+        public event EventHandler<MyTurnEventArgs>? MyTurn = null;
+        public event EventHandler<SuccessfullySyncedEventArgs>? SuccessfullySynced = null;
 
         /// <summary>
         /// Initializes a sync engine for a system player
         /// </summary>
         /// <param name="player">The system player. This is the person from whose perspective we are syncing.</param>
-        protected BaseSyncEngine(Player player)
+        /// <param name="autoSyncStrategy">The IAutoSync strategy to use, can always be changed later through the property</param>
+        protected BaseSyncEngine(Player player, IAutoSyncStrategy? autoSyncStrategy)
         {
             SystemPlayer = player;
+            this.autoSyncStrategy = autoSyncStrategy ?? new DefaultAutoSyncStrategy();
         }
 
         /// <summary>
