@@ -5,11 +5,9 @@ VisualStudioVersion = 16.0.30611.23
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChessClock.Model", "ChessClock.Model\ChessClock.Model.csproj", "{92239007-063C-4CA1-BCDA-619EE1B16284}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChessClock.Data", "ChessClock.Data\ChessClock.Data.csproj", "{FB83C04F-4C2D-4824-9B97-11A25848D529}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChessClock.SyncEngine", "ChessClock.SyncEngine\ChessClock.SyncEngine.csproj", "{1F9FEB1D-0EBA-42A4-80A8-D3A4AD64B257}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChessClock.SyncEngine.Azure", "ChessClock.SyncEngine.Azure\ChessClock.SyncEngine.Azure.csproj", "{4C10E128-6EFF-4549-8D6F-7BA08EF1C4C8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChessClock.SyncEngine.Azure", "ChessClock.SyncEngine.Azure\ChessClock.SyncEngine.Azure.csproj", "{4C10E128-6EFF-4549-8D6F-7BA08EF1C4C8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,26 +43,6 @@ Global
 		{92239007-063C-4CA1-BCDA-619EE1B16284}.Release|x64.Build.0 = Release|Any CPU
 		{92239007-063C-4CA1-BCDA-619EE1B16284}.Release|x86.ActiveCfg = Release|Any CPU
 		{92239007-063C-4CA1-BCDA-619EE1B16284}.Release|x86.Build.0 = Release|Any CPU
-		{FB83C04F-4C2D-4824-9B97-11A25848D529}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FB83C04F-4C2D-4824-9B97-11A25848D529}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FB83C04F-4C2D-4824-9B97-11A25848D529}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{FB83C04F-4C2D-4824-9B97-11A25848D529}.Debug|ARM.Build.0 = Debug|Any CPU
-		{FB83C04F-4C2D-4824-9B97-11A25848D529}.Debug|ARM64.ActiveCfg = Debug|Any CPU
-		{FB83C04F-4C2D-4824-9B97-11A25848D529}.Debug|ARM64.Build.0 = Debug|Any CPU
-		{FB83C04F-4C2D-4824-9B97-11A25848D529}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{FB83C04F-4C2D-4824-9B97-11A25848D529}.Debug|x64.Build.0 = Debug|Any CPU
-		{FB83C04F-4C2D-4824-9B97-11A25848D529}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{FB83C04F-4C2D-4824-9B97-11A25848D529}.Debug|x86.Build.0 = Debug|Any CPU
-		{FB83C04F-4C2D-4824-9B97-11A25848D529}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FB83C04F-4C2D-4824-9B97-11A25848D529}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FB83C04F-4C2D-4824-9B97-11A25848D529}.Release|ARM.ActiveCfg = Release|Any CPU
-		{FB83C04F-4C2D-4824-9B97-11A25848D529}.Release|ARM.Build.0 = Release|Any CPU
-		{FB83C04F-4C2D-4824-9B97-11A25848D529}.Release|ARM64.ActiveCfg = Release|Any CPU
-		{FB83C04F-4C2D-4824-9B97-11A25848D529}.Release|ARM64.Build.0 = Release|Any CPU
-		{FB83C04F-4C2D-4824-9B97-11A25848D529}.Release|x64.ActiveCfg = Release|Any CPU
-		{FB83C04F-4C2D-4824-9B97-11A25848D529}.Release|x64.Build.0 = Release|Any CPU
-		{FB83C04F-4C2D-4824-9B97-11A25848D529}.Release|x86.ActiveCfg = Release|Any CPU
-		{FB83C04F-4C2D-4824-9B97-11A25848D529}.Release|x86.Build.0 = Release|Any CPU
 		{1F9FEB1D-0EBA-42A4-80A8-D3A4AD64B257}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1F9FEB1D-0EBA-42A4-80A8-D3A4AD64B257}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1F9FEB1D-0EBA-42A4-80A8-D3A4AD64B257}.Debug|ARM.ActiveCfg = Debug|Any CPU
