@@ -1,5 +1,4 @@
 ﻿using Azure.Storage.Blobs;
-using ChessClock.Data;
 using ChessClock.Model;
 using ChessClock.SyncEngine.Azure.Extensions;
 using Microsoft.Azure.Cosmos.Table;
@@ -8,8 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
+using ChessClock.SyncEngine.Events;
+using Microsoft.Extensions.Logging;
 
 namespace ChessClock.SyncEngine.Azure
 {
@@ -18,49 +18,100 @@ namespace ChessClock.SyncEngine.Azure
         private static readonly string[] ColumnKeys = { "Name", "Players", "CurrentPlayer", "SavefileName" };
 
         private readonly string connectionString;
-        private readonly CloudStorageAccount cloudStorageAccount;
         private readonly CloudTableClient tableClient;
         private readonly string tableName;
         private readonly string containerName;
+        private readonly Civ6Filesystem filesystem;
 
-        public AzureSyncEngine(AzureSyncEngineOptions options) : base(options.SystemPlayer)
+        private bool tableExists = false;
+
+        /// <summary>
+        /// Creates a new instance of the AzureSyncEngine
+        /// </summary>
+        /// <param name="options">Options for the AzureSyncEngine</param>
+        /// <param name="autoSyncStrategy">The IAutoSyncStrategy to use</param>
+        /// <param name="logger">The logger to use</param>
+        public AzureSyncEngine(AzureSyncEngineOptions options, IAutoSyncStrategy autoSyncStrategy, ILogger<AzureSyncEngine> logger, Civ6Filesystem filesystem)
+            : base(options.SystemPlayer, autoSyncStrategy, logger)
         {
             connectionString = options.ConnectionString;
             tableName = options.TableName;
-            cloudStorageAccount = CloudStorageAccount.Parse(connectionString);
-            tableClient = cloudStorageAccount.CreateCloudTableClient(new TableClientConfiguration());
             containerName = options.ContainerName;
+            this.filesystem = filesystem;
+            
+            tableClient = CloudStorageAccount.Parse(connectionString).CreateCloudTableClient(new TableClientConfiguration());
         }
 
         public override async ValueTask PassTurnAsync(Game game)
         {
+            Logger.LogDebug($"Moving turn on game {game}");
+
             game.NextTurn();
             await InsertOrMergeGame(game);
         }
 
-        public override ValueTask SubmitTurnAsync(Game game)
+        public override async ValueTask SubmitTurnAsync(Game game)
         {
-            throw new NotImplementedException();
+            Logger.LogDebug($"Submitting turn for game {game}");
+
+            await PassTurnAsync(game);
+            await UploadSavefile(game);
         }
 
         protected override void Sync(Game game)
         {
-            throw new NotImplementedException();
+            Logger.LogDebug($"Syncing game {game}");
+
+            var newGame = CreateGameSource().FirstOrDefault(g => g.Id == game.Id);
+            if (newGame is null)
+            {
+                Logger.LogDebug($"Game only exists locally");
+                return;
+            }
+
+            if (game.LastUpdated > newGame.LastUpdated)
+            {
+                Logger.LogDebug($"Local game is newer");
+                return;
+            }
+
+            var successfullySyncedArgs = new SuccessfullySyncedEventArgs(newGame, DateTimeOffset.Now);
+            OnSuccessfullySynced(successfullySyncedArgs);
+
+            if (newGame.CurrentPlayer != SystemPlayer)
+            {
+                Logger.LogDebug($"Pulled in remote game, but it's not our turn");
+                return;
+            }
+
+            DownloadSavefile(newGame).GetAwaiter().GetResult();
+
+            var myTurnArgs = new MyTurnEventArgs(newGame);
+            OnMyTurnReached(myTurnArgs);
         }
 
         protected override IQueryable<Game> CreateGameSource()
         {
-            var query = new TableQuery<AzureCiv6GameEntity>()
-                .Resolve(Resolve);
+            var tableRef = tableClient.GetTableReference(tableName);
 
-            return query;
+            if (!tableExists)
+            {
+                tableExists = tableRef.CreateIfNotExists();
+            }
+
+            return tableRef.CreateQuery<AzureCiv6GameEntity>().Resolve(Resolve);
         }
 
         protected override DateTimeOffset GetGameLastModifiedTime(Game game)
         {
-            var fullPath = GetFullSavefilePath(game);
+            var remoteGame = CreateGameSource().FirstOrDefault(g => g.Id == game.Id);
 
-            return File.GetLastWriteTimeUtc(fullPath);
+            return remoteGame?.LastUpdated ?? DateTimeOffset.MinValue;
+        }
+
+        protected override DateTimeOffset GetLocalSavefileLastModifiedTime(Game game)
+        {
+            throw new NotImplementedException();
         }
 
         protected override DateTimeOffset GetRemoteSavefileLastModifiedTime(Game game)
@@ -71,7 +122,7 @@ namespace ChessClock.SyncEngine.Azure
             return properties.Value.LastModified;
         }
 
-        private Game Resolve(string pk, string rk, DateTimeOffset ts, IDictionary<string, EntityProperty> props, string etag)
+        private static Game Resolve(string pk, string rk, DateTimeOffset ts, IDictionary<string, EntityProperty> props, string etag)
         {
             var validProperties = ValidateProperties(props.Keys);
 
@@ -108,19 +159,75 @@ namespace ChessClock.SyncEngine.Azure
 
             var insert = TableOperation.InsertOrMerge(new AzureCiv6GameEntity(game));
 
-            var result = await gamesTable.ExecuteAsync(insert);
+            await gamesTable.ExecuteAsync(insert);
         }
 
-        private ValueTask UploadSavefile(Game game)
+        private async ValueTask UploadSavefile(Game game)
+        {
+            var filePath = GetFullSavefilePath(game);
+            var blobClient = CreateBlobClientForGame(game);
+
+            Logger.LogDebug($"Uploading savefile at {filePath} for game {game}");
+
+            var alreadyExists = (await blobClient.ExistsAsync()).Value;
+            if (alreadyExists)
+            {
+                try
+                {
+                    var properties = (await blobClient.GetPropertiesAsync()).Value;
+                    var version = Convert.ToInt32(properties.VersionId) + 1;
+
+                    await blobClient.WithVersion(version.ToString()).UploadAsync(File.OpenRead(filePath));
+                }
+                catch (Exception e)
+                {
+                    Logger.LogError(e, $"Error occurred when uploading {game}");
+                    throw;
+                }
+            }
+            else
+            {
+                try
+                {
+                    await blobClient.WithVersion("1").UploadAsync(File.OpenRead(filePath));
+                }
+                catch (Exception e)
+                {
+                    Logger.LogError(e, $"Error occurred when uploading {game} for the first time");
+                    throw;
+                }
+            }
+        }
+
+        private async ValueTask DownloadSavefile(Game game)
         {
             var filePath = GetFullSavefilePath(game);
 
-            throw new NotImplementedException();
+            Logger.LogDebug($"Downloading savefile for game {game} to {filePath}");
+
+            try
+            {
+                var blobClient = CreateBlobClientForGame(game);
+                var remoteFileExists = (await blobClient.ExistsAsync()).Value;
+
+                if (!remoteFileExists)
+                {
+                    Logger.LogDebug($"No remote savefile for game {game} exists");
+                    return;
+                }
+
+                await blobClient.DownloadToAsync(filePath);
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e, $"Error occurred when downloading save file for game {game}");
+                throw;
+            }
         }
 
         private string GetFullSavefilePath(Game game)
         {
-            throw new NotImplementedException();
+            return filesystem.GetHotSeatSaveFileFullName(game);
         }
     }
 }
