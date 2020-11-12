@@ -79,7 +79,7 @@ namespace ChessClock.SyncEngine
         protected BaseSyncEngine(Player player, IAutoSyncStrategy? autoSyncStrategy)
         {
             SystemPlayer = player;
-            this.autoSyncStrategy = autoSyncStrategy ?? new DefaultAutoSyncStrategy();
+            AutoSyncStrategy = autoSyncStrategy ?? new DefaultAutoSyncStrategy(SystemPlayer);
         }
 
         /// <summary>
