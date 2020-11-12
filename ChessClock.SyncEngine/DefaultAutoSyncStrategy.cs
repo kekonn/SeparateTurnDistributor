@@ -12,6 +12,12 @@ namespace ChessClock.SyncEngine
         private static readonly object LockObject = new object();
 
         private readonly Dictionary<Game, DateTimeOffset> lastSyncedTimes = new Dictionary<Game, DateTimeOffset>();
+        private readonly Player systemPlayer;
+
+        internal DefaultAutoSyncStrategy(Player systemPlayer)
+        {
+            this.systemPlayer = systemPlayer;
+        }
 
         /// <summary>
         /// Event handler for when the game was synced successfully.
@@ -44,6 +50,8 @@ namespace ChessClock.SyncEngine
         /// <remarks>This method is thread safe because it locks before changing internal state.</remarks>
         public bool ShouldSync(Game game)
         {
+            if (IsMyTurn(game)) return false;
+
             lock (LockObject)
             {
                 var isKnown = lastSyncedTimes.ContainsKey(game);
@@ -56,6 +64,11 @@ namespace ChessClock.SyncEngine
 
                 return (DateTimeOffset.UtcNow - lastSyncTime).TotalSeconds >= MinimumInterval.TotalSeconds;
             }
+        }
+
+        private bool IsMyTurn(Game game)
+        {
+            return game.CurrentPlayer == systemPlayer;
         }
     }
 }
