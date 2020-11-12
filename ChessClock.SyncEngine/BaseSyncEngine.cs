@@ -115,7 +115,7 @@ namespace ChessClock.SyncEngine
             var handler = SuccessfullySynced;
             handler?.Invoke(this, args);
         }
-        
+
         /// <summary>
         /// Asynchronously gets all games that involve a given player
         /// </summary>
@@ -123,7 +123,7 @@ namespace ChessClock.SyncEngine
         /// <returns></returns>
         public virtual Task<IEnumerable<Game>> GamesForAsync(Player player)
         {
-            return Task.FromResult(CreateGameSource().Where(g => g.Players.Contains(player)).AsEnumerable());
+            return Task.FromResult(CreateGameSource().Where(g => g.Players.Contains(player)).ToArray().AsEnumerable());
         }
 
         /// <summary>
@@ -133,7 +133,7 @@ namespace ChessClock.SyncEngine
         /// <returns>The game</returns>
         public Task<Game> GetGameAsync(Guid id)
         {
-            return Task.FromResult(CreateGameSource().First(g => g.Id.Equals(id)));
+            return Task.FromResult(CreateGameSource().FirstOrDefault(g => g.Id.Equals(id)));
         }
 
         /// <summary>
@@ -153,21 +153,13 @@ namespace ChessClock.SyncEngine
             SuccessfullySynced = null;
             SuccessfullySynced = autoSyncStrategy.GameSyncedSuccessfully;
 
-
             if (!(autoSyncStrategy is DefaultAutoSyncStrategy defaultSyncStrat)) return;
 
-            if (autoSyncIntervalTimer == null)
-            {
-                autoSyncIntervalTimer = new Timer();
-                autoSyncIntervalTimer.Stop();
-                autoSyncIntervalTimer.Interval = defaultSyncStrat.MinimumInterval.TotalMilliseconds;
-                autoSyncIntervalTimer.Start();
-            } else
-            {
-                autoSyncIntervalTimer.Stop();
-                autoSyncIntervalTimer.Interval = defaultSyncStrat.MinimumInterval.TotalMilliseconds;
-                autoSyncIntervalTimer.Start();
-            }
+            autoSyncIntervalTimer ??= new Timer();
+
+            autoSyncIntervalTimer.Stop();
+            autoSyncIntervalTimer.Interval = defaultSyncStrat.MinimumInterval.TotalMilliseconds;
+            autoSyncIntervalTimer.Start();
         }
 
         /// <summary>
@@ -248,6 +240,6 @@ namespace ChessClock.SyncEngine
         /// <param name="game">Which game's save file to check</param>
         /// <returns>A DateTimeOffset for the last modified time</returns>
         protected abstract DateTimeOffset GetRemoteSavefileLastModifiedTime(Game game);
-        
+
     }
 }
