@@ -26,7 +26,7 @@ namespace ChessClock.UI.Extensions
                 var logger = serviceProvider.GetService<ILogger<ISyncEngine>>() ?? throw new Exception("Could not find logger for sync engine");
                 var filesystem = serviceProvider.GetService<Civ6Filesystem>() ?? throw new Exception("Could not find filesystem for sync engine");
 
-                var syncEngine = new AzureSyncEngine(options, null, logger, filesystem);
+                var syncEngine = new AzureSyncEngine(options, logger:logger, filesystem:filesystem, autoSyncStrategy:null);
 
                 return syncEngine;
             });
