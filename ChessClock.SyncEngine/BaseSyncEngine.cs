@@ -63,7 +63,7 @@ namespace ChessClock.SyncEngine
             }
         }
 
-        protected readonly ILogger<BaseSyncEngine> Logger;
+        protected readonly ILogger<ISyncEngine> Logger;
 
         /// <summary>
         /// The system player decides the perspective for the SyncEngine
@@ -80,7 +80,7 @@ namespace ChessClock.SyncEngine
         /// <param name="player">The system player. This is the person from whose perspective we are syncing.</param>
         /// <param name="autoSyncStrategy">The IAutoSync strategy to use, can always be changed later through the property</param>
         /// <param name="logger">The logger to use</param>
-        protected BaseSyncEngine(Player player, IAutoSyncStrategy? autoSyncStrategy, ILogger<BaseSyncEngine> logger)
+        protected BaseSyncEngine(Player player, IAutoSyncStrategy? autoSyncStrategy, ILogger<ISyncEngine> logger)
         {
             SystemPlayer = player;
             this.autoSyncStrategy = autoSyncStrategy ?? new DefaultAutoSyncStrategy(SystemPlayer);
