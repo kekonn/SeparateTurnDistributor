@@ -1,10 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net5.0-windows</TargetFramework>
-    <UseWPF>true</UseWPF>
     <AssemblyName>std</AssemblyName>
+    <UseWPF>true</UseWPF>
     <ApplicationIcon>hotseat.ico</ApplicationIcon>
     <StartupObject>ChessClock.UI.App</StartupObject>
     <UserSecretsId>5f10779f-7099-4c67-a33b-aa052da869a7</UserSecretsId>
