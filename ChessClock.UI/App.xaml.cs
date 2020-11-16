@@ -8,9 +8,11 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Markup;
+using ChessClock.SyncEngine;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using ChessClock.UI.Extensions;
+using ChessClock.UI.ViewModels;
 
 
 namespace ChessClock.UI
@@ -38,8 +40,8 @@ namespace ChessClock.UI
 
         private void InitializeMainWindow()
         {
-            var window = new MainWindow();
-            //Apply viewmodel
+            var viewModel = new MainViewModel(ServiceProvider.GetService<ISyncEngine>());
+            var window = new MainWindow(viewModel);
 
             this.MainWindow = window;
             this.MainWindow.Show();

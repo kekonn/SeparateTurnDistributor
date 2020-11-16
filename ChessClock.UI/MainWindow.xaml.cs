@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ChessClock.SyncEngine;
+using ChessClock.UI.ViewModels;
 
 namespace ChessClock.UI
 {
@@ -20,9 +22,15 @@ namespace ChessClock.UI
     /// </summary>
     public partial class MainWindow : Window
     {
+
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        public MainWindow(MainViewModel viewModel) : this()
+        {
+            DataContext = viewModel;
         }
     }
 }
