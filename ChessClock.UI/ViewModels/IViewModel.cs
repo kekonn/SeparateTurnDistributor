@@ -13,7 +13,6 @@ namespace ChessClock.UI.ViewModels
 
         void Initialize();
         ValueTask InitializeAsync();
-        IEnumerable<ICommand?> Commands { get; }
         ContentControl View { get; }
         string Title { get; }
     }

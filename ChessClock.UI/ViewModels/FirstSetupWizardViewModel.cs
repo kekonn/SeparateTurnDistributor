@@ -5,6 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Navigation;
+using ChessClock.UI.Properties;
+using ChessClock.UI.Views;
 
 namespace ChessClock.UI.ViewModels
 {
@@ -12,17 +15,39 @@ namespace ChessClock.UI.ViewModels
     {
         public string Title { get; set; } = "Player Setup";
 
-        public void Initialize()
+        public string PlayerName { get; set; }
+
+        public string PlayerSeed { get; set; }
+
+        public ICommand PlayerSetupDoneCommand { get; }
+
+        private readonly Navigator navigator;
+
+        public FirstSetupWizardViewModel(Navigator navigator)
         {
-            throw new NotImplementedException();
+            View = new WizardHost() {DataContext = this};
+            PlayerSeed = PlayerUtilities.GetSystemPlayerSeed();
+            PlayerName = Settings.Default.PlayerName;
+            PlayerSetupDoneCommand = new ActionCommand(p => PlayerName is {Length: > 0} && PlayerSeed is {Length: > 0},
+                p => PlayerSetupDone());
+            this.navigator = navigator;
         }
 
-        public async ValueTask InitializeAsync()
-        {
-            await Task.Run(Initialize);
-        }
+        public void Initialize() {}
 
-        public IEnumerable<ICommand?> Commands { get; }
+        public ValueTask InitializeAsync() => ValueTask.CompletedTask;
+
         public ContentControl View { get; }
+
+        private void PlayerSetupDone()
+        {
+            var player = PlayerUtilities.FromSeed(PlayerName, PlayerSeed);
+            PlayerUtilities.SaveSystemPlayer(player);
+            
+            Settings.Default.FirstRunSetupFinished = true;
+            Settings.Default.Save();
+
+            navigator.ShowGamesView();
+        }
     }
 }

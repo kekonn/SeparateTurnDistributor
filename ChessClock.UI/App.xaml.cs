@@ -43,11 +43,14 @@ namespace ChessClock.UI
             InitializeUI();
         }
 
-        private void InitializeUI()
+        private void InitializeUI(IViewModel? viewModel = default)
         {
-            var viewModel = GetMainViewMode();
+            viewModel ??= GetMainViewMode();
+
+            MainWindow?.Close();
 
             var contentHost = new ContentHostWindow() { DataContext = viewModel};
+            viewModel.Initialize();
 
             MainWindow = contentHost;
             MainWindow.Show();
@@ -55,9 +58,14 @@ namespace ChessClock.UI
 
         private IViewModel GetMainViewMode()
         {
-            return FirstTimeSetupFinished
-                ? new GamesViewModel(ServiceProvider.GetRequiredService<ISyncEngine>())
-                : new FirstSetupWizardViewModel();
+            if (FirstTimeSetupFinished)
+            {
+                return new GamesViewModel(ServiceProvider.GetRequiredService<ISyncEngine>());
+            }
+            else
+            {
+                return new FirstSetupWizardViewModel(ServiceProvider.GetRequiredService<Navigator>());
+            }
         }
 
         private void InitializeConfig()
@@ -99,6 +107,13 @@ namespace ChessClock.UI
                 options.TableName = "game";
                 options.SystemPlayer = PlayerUtilities.LoadSystemPlayer();
             });
+
+            services.AddSingleton(new Navigator());
+        }
+
+        internal void ShowViewModel(IViewModel viewModel)
+        {
+            InitializeUI(viewModel);
         }
     }
 }

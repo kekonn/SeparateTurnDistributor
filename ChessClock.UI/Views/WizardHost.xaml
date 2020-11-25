@@ -1,12 +1,24 @@
-﻿<Window x:Class="ChessClock.UI.Views.WizardHost"
+﻿<ContentControl x:Class="ChessClock.UI.Views.WizardHost"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ChessClock.UI.Views"
         mc:Ignorable="d"
-        Title="{Binding Title}" Height="450" Width="800" ShowInTaskbar="False" WindowStyle="ToolWindow" ResizeMode="CanMinimize">
+        d:DesignWidth="800" d:DesignHeight="450">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="333*"/>
+            <ColumnDefinition Width="333"/>
+            <ColumnDefinition Width="333*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="1">
+            <Label Content="Player name"/>
+            <TextBox x:Name="PlayerNameTextbox" TextWrapping="Wrap" Text="{Binding PlayerName}"/>
+            <Label Content="Player Seed"/>
+            <TextBox x:Name="PlayerSeedTextbox" TextWrapping="Wrap" Text="{Binding PlayerSeed}"/>
+        </StackPanel>
+        <Button x:Name="PlayerSetupDoneButton" Content="Done" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Command="{Binding PlayerSetupDoneCommand}"/>
+
     </Grid>
-</Window>
+</ContentControl>

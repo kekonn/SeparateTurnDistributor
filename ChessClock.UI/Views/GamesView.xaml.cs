@@ -27,11 +27,5 @@ namespace ChessClock.UI.Views
         {
             InitializeComponent();
         }
-
-        public GamesView(GamesViewModel viewModel) : this()
-        {
-            DataContext = viewModel;
-            viewModel.Initialize();
-        }
     }
 }

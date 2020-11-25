@@ -8,7 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using ChessClock.Model;
 using ChessClock.SyncEngine;
-using ChessClock.UI.Commands;
+using ChessClock.UI.Extensions;
 using ChessClock.UI.Views;
 
 namespace ChessClock.UI.ViewModels
@@ -35,42 +35,22 @@ namespace ChessClock.UI.ViewModels
         {
             if (initialized) return;
 
-            InitSystemPlayer();
-            InitGamesList();
-
-            initialized = true;
+            InitializeAsync().Await();
         }
 
-        private void InitGamesList()
+        private async ValueTask InitGamesList()
         {
-            if (SystemPlayer == Player.One)
-            {
-                return;
-            }
+            var gamesList = await SyncEngine.GamesForAsync(SystemPlayer);
+            Games = new ObservableCollection<Game>(gamesList);
         }
 
         public async ValueTask InitializeAsync()
         {
-            await Task.Run(Initialize);
-        }
+            if (initialized) return;
 
-        public IEnumerable<ICommand?> Commands
-        {
-            get
-            {
-                yield return commandQueue.TryDequeue(out ICommand command) ? command : new EmptyCommand();
-            }
-        }
+            await InitGamesList();
 
-        private void InitSystemPlayer()
-        {
-            var player = PlayerUtilities.GetSystemPlayer();
-            if (player == Player.One)
-            {
-                commandQueue.Enqueue(new SystemPlayerSetupCommand());
-                return;
-            }
-
+            initialized = true;
         }
     }
 }

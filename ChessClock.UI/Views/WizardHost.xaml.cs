@@ -17,7 +17,7 @@ namespace ChessClock.UI.Views
     /// <summary>
     /// Interaction logic for WizardWindow.xaml
     /// </summary>
-    public partial class WizardHost : Window
+    public partial class WizardHost : ContentControl
     {
         public WizardHost()
         {
