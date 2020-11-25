@@ -49,7 +49,7 @@ namespace ChessClock.UI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Player One")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Player Name")]
         public string PlayerName {
             get {
                 return ((string)(this["PlayerName"]));
