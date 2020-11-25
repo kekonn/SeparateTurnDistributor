@@ -46,4 +46,10 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Page Update="ContentHostWindow.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+  </ItemGroup>
+
 </Project>

@@ -4,28 +4,31 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Input;
 using ChessClock.Model;
 using ChessClock.SyncEngine;
 using ChessClock.UI.Commands;
+using ChessClock.UI.Views;
 
 namespace ChessClock.UI.ViewModels
 {
-    public class MainViewModel : IViewModel
+    public class GamesViewModel : IViewModel
     {
         public Player SystemPlayer { get; set; } = Player.One;
-        public ObservableCollection<Game> Games { get; set; }
-        public string WindowTitle { get; set; } = "Separate Turn Distributor";
+        public ObservableCollection<Game> Games { get; set; } = new ObservableCollection<Game>();
+        public string Title { get; set; } = "Separate Turn Distributor";
         public ISyncEngine SyncEngine { get; private set; }
-        public MainWindow Window { get; set; }
+        public ContentControl View { get; private set; }
 
         private Queue<ICommand> commandQueue;
         private bool initialized = false;
 
-        public MainViewModel(ISyncEngine syncEngine)
+        public GamesViewModel(ISyncEngine syncEngine)
         {
             SyncEngine = syncEngine;
             commandQueue = new Queue<ICommand>();
+            View = new GamesView {DataContext = this};
         }
 
         public void Initialize()
@@ -51,9 +54,12 @@ namespace ChessClock.UI.ViewModels
             await Task.Run(Initialize);
         }
 
-        public ICommand? NextCommand()
+        public IEnumerable<ICommand?> Commands
         {
-            return commandQueue.TryDequeue(out ICommand command) ? command : null;
+            get
+            {
+                yield return commandQueue.TryDequeue(out ICommand command) ? command : new EmptyCommand();
+            }
         }
 
         private void InitSystemPlayer()

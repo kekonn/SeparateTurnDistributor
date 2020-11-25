@@ -18,20 +18,14 @@ using ChessClock.UI.ViewModels;
 namespace ChessClock.UI
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for ContentHostWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class ContentHostWindow : Window
     {
 
-        public MainWindow()
+        public ContentHostWindow()
         {
             InitializeComponent();
-        }
-
-        public MainWindow(MainViewModel viewModel) : this()
-        {
-            DataContext = viewModel;
-            viewModel.Initialize();
         }
     }
 }

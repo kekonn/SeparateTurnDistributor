@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Markup;
 using ChessClock.SyncEngine;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using ChessClock.UI.Extensions;
 using ChessClock.UI.Properties;
 using ChessClock.UI.ViewModels;
+using ChessClock.UI.Views;
 
 
 namespace ChessClock.UI
@@ -38,16 +40,24 @@ namespace ChessClock.UI
 
             InitializeServices();
 
-            InitializeMainWindow();
+            InitializeUI();
         }
 
-        private void InitializeMainWindow()
+        private void InitializeUI()
         {
-            var viewModel = new MainViewModel(ServiceProvider.GetService<ISyncEngine>());
-            var window = new MainWindow(viewModel);
+            var viewModel = GetMainViewMode();
 
-            this.MainWindow = window;
-            this.MainWindow.Show();
+            var contentHost = new ContentHostWindow() { DataContext = viewModel};
+
+            MainWindow = contentHost;
+            MainWindow.Show();
+        }
+
+        private IViewModel GetMainViewMode()
+        {
+            return FirstTimeSetupFinished
+                ? new GamesViewModel(ServiceProvider.GetRequiredService<ISyncEngine>())
+                : new FirstSetupWizardViewModel();
         }
 
         private void InitializeConfig()
