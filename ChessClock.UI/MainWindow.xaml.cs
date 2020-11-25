@@ -31,6 +31,7 @@ namespace ChessClock.UI
         public MainWindow(MainViewModel viewModel) : this()
         {
             DataContext = viewModel;
+            viewModel.Initialize();
         }
     }
 }

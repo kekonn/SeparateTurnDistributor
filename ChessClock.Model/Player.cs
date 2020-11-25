@@ -22,7 +22,7 @@ namespace ChessClock.Model
             return $"{Name} - {Id}";
         }
 
-        public static Player One => new Player { Name = "Player One" };
+        public static readonly Player One = new Player { Name = "Player One", Id = Guid.Empty};
 
         public bool Equals(Player? other)
         {

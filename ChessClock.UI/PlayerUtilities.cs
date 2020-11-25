@@ -10,13 +10,13 @@ namespace ChessClock.UI
     public static class PlayerUtilities
     {
         private static readonly ILogger Logger = LogManager.GetLogger(nameof(PlayerUtilities));
-        private static Player _systemPlayer;
+        private static Player _systemPlayer = Player.One;
 
         public static Player LoadSystemPlayer()
         {
             Logger.Trace("Loading System Player");
 
-            if (_systemPlayer != null)
+            if (_systemPlayer != Player.One)
             {
                 return _systemPlayer;
             }

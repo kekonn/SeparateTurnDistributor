@@ -5,9 +5,11 @@
     <TargetFramework>net5.0-windows</TargetFramework>
     <AssemblyName>std</AssemblyName>
     <UseWPF>true</UseWPF>
+    <LangVersion>9.0</LangVersion>
     <ApplicationIcon>hotseat.ico</ApplicationIcon>
     <StartupObject>ChessClock.UI.App</StartupObject>
     <UserSecretsId>5f10779f-7099-4c67-a33b-aa052da869a7</UserSecretsId>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -32,6 +34,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="hotseat.ico">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
     <None Update="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -39,10 +44,6 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Commands\" />
   </ItemGroup>
 
 </Project>

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ChessClock.UI"
         mc:Ignorable="d"
-        Title="{Binding Path=WindowTitle}" Height="411" Width="936" ResizeMode="CanResize" Icon="/hotseat.ico">
+        Title="{Binding Path=WindowTitle}" Height="411" Width="936" ResizeMode="CanResize">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="146*"/>
