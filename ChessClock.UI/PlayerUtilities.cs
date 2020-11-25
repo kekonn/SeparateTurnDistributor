@@ -31,18 +31,22 @@ namespace ChessClock.UI
                 playerId = new Guid(guidBytes);
 
                 Settings.Default.PlayerId = playerId;
+                _systemPlayer = new Player()
+                {
+                    Id = playerId,
+                    Name = playerName
+                };
+
+                Logger.Trace($"Found System Player: {_systemPlayer}");
+
                 Settings.Default.Save();
             }
 
-            _systemPlayer = new Player()
-            {
-                Id = playerId,
-                Name = playerName
-            };
+            return _systemPlayer;
+        }
 
-            Logger.Trace($"Found System Player: {_systemPlayer}");
-
-
+        public static Player GetSystemPlayer()
+        {
             return _systemPlayer;
         }
 

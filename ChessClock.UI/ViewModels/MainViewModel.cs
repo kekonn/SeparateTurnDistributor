@@ -58,7 +58,7 @@ namespace ChessClock.UI.ViewModels
 
         private void InitSystemPlayer()
         {
-            var player = PlayerUtilities.LoadSystemPlayer();
+            var player = PlayerUtilities.GetSystemPlayer();
             if (player == Player.One)
             {
                 commandQueue.Enqueue(new SystemPlayerSetupCommand());
