@@ -12,6 +12,7 @@ using ChessClock.SyncEngine;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using ChessClock.UI.Extensions;
+using ChessClock.UI.Properties;
 using ChessClock.UI.ViewModels;
 
 
@@ -28,6 +29,8 @@ namespace ChessClock.UI
         public IServiceProvider ServiceProvider => serviceProvider;
 
         private IConfigurationRoot configuration;
+
+        public static bool FirstTimeSetupFinished => Settings.Default.FirstRunSetupFinished;
 
         public App()
         {

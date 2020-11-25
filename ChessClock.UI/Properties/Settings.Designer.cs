@@ -82,5 +82,17 @@ namespace ChessClock.UI.Properties {
                 this["PlayerSeed"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool FirstRunSetupFinished {
+            get {
+                return ((bool)(this["FirstRunSetupFinished"]));
+            }
+            set {
+                this["FirstRunSetupFinished"] = value;
+            }
+        }
     }
 }
