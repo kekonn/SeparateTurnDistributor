@@ -14,7 +14,7 @@
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="1">
             <Label Content="Player name"/>
-            <TextBox x:Name="PlayerNameTextbox" TextWrapping="Wrap" Text="{Binding PlayerName}"/>
+            <TextBox x:Name="PlayerNameTextbox" TextWrapping="Wrap" Text="{Binding PlayerName, UpdateSourceTrigger=PropertyChanged}"/>
             <Label Content="Player Seed"/>
             <TextBox x:Name="PlayerSeedTextbox" TextWrapping="Wrap" Text="{Binding PlayerSeed}"/>
         </StackPanel>
