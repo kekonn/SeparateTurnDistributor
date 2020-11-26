@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using ChessClock.Model;
 using ChessClock.SyncEngine;
 using ChessClock.UI.Extensions;
@@ -11,6 +12,7 @@ namespace ChessClock.UI.ViewModels
     {
         private ObservableCollection<Game> games = new ObservableCollection<Game>();
         private bool initialized = false;
+        private Game? selectedGame;
 
         public Player SystemPlayer => SyncEngine.SystemPlayer;
 
@@ -25,7 +27,20 @@ namespace ChessClock.UI.ViewModels
                 OnPropertyChanged();
             }
         }
+
+        public Game? SelectedGame
+        {
+            get => selectedGame;
+            set
+            {
+                if (selectedGame == value) return;
+
+                selectedGame = value;
+                OnPropertyChanged();
+            }
+        }
         public ISyncEngine SyncEngine { get; }
+        public ICommand ForceSyncCommand { get; set; }
 
         public GamesViewModel(ISyncEngine syncEngine)
         {
@@ -41,12 +56,6 @@ namespace ChessClock.UI.ViewModels
             InitializeAsync().Await();
         }
 
-        private async ValueTask InitGamesList()
-        {
-            var gamesList = await SyncEngine.GamesForAsync(SystemPlayer);
-            Games = new ObservableCollection<Game>(gamesList);
-        }
-
         public override async ValueTask InitializeAsync()
         {
             if (initialized) return;
@@ -54,6 +63,12 @@ namespace ChessClock.UI.ViewModels
             await InitGamesList();
 
             initialized = true;
+        }
+
+        private async ValueTask InitGamesList()
+        {
+            var gamesList = await SyncEngine.GamesForAsync(SystemPlayer);
+            Games = new ObservableCollection<Game>(gamesList);
         }
     }
 }

@@ -45,7 +45,6 @@ namespace ChessClock.UI.ViewModels
         public abstract void Initialize();
         public abstract ValueTask InitializeAsync();
 
-
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
