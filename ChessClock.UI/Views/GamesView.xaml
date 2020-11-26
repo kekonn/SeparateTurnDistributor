@@ -7,7 +7,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:local="clr-namespace:ChessClock.UI"
         mc:Ignorable="d"
-        >
+        d:DesignHeight="411" d:DesignWidth="936">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="146*"/>
@@ -21,14 +21,29 @@
                  ItemsSource="{Binding Path=Games}" SelectedItem="{Binding Path=SelectedGame,Mode=TwoWay}">
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="m:Game">
-                    <ListBoxItem Content="{Binding Path=Name}" />
+                    <TextBlock Text="{Binding Path=Name}" />
                 </DataTemplate>
+
             </ListBox.ItemTemplate>
         </ListBox>
         <Button x:Name="ForceSyncButton" Content="Force Sync" Margin="10,5,10,17" Grid.Row="1" d:LayoutOverrides="HorizontalAlignment, VerticalAlignment"/>
         <TabControl Grid.Column="1" Margin="0,10,10,0" DataContext="{Binding Path=SelectedGame}">
             <TabItem Header="Game Details">
-                <Grid />
+                <Grid >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="800*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="103*"/>
+                        <ColumnDefinition Width="585*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Row="0" Grid.Column="0" Content="Name:" HorizontalContentAlignment="Right" Margin="0,0,0,2" d:LayoutOverrides="Height"/>
+                    <Label Grid.Row="1" Grid.Column="0" Content="Current Player:" HorizontalContentAlignment="Right" Margin="0,0,0,2" d:LayoutOverrides="Height"/>
+                    <TextBox x:Name="GameNameTextbox" Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" d:LayoutOverrides="Height" Margin="5,2,5,2" Text="{Binding Name}" VerticalContentAlignment="Center"/>
+                    <Label Content="{Binding CurrentPlayer.Name}" Grid.Column="1" Grid.Row="1" Margin="5,2,5,2"/>
+                </Grid>
             </TabItem>
             <TabItem Header="Local Save">
                 <Grid />
