@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Windows.Input;
 using ChessClock.Model;
 using ChessClock.SyncEngine;
 using ChessClock.UI.Extensions;
@@ -13,25 +7,34 @@ using ChessClock.UI.Views;
 
 namespace ChessClock.UI.ViewModels
 {
-    public class GamesViewModel : IViewModel
+    public class GamesViewModel : BaseViewModel
     {
-        public Player SystemPlayer => SyncEngine.SystemPlayer;
-        public ObservableCollection<Game> Games { get; set; } = new ObservableCollection<Game>();
-        public string Title { get; set; } = "Separate Turn Distributor";
-        public ISyncEngine SyncEngine { get; private set; }
-        public ContentControl View { get; private set; }
-
-        private Queue<ICommand> commandQueue;
+        private ObservableCollection<Game> games = new ObservableCollection<Game>();
         private bool initialized = false;
+
+        public Player SystemPlayer => SyncEngine.SystemPlayer;
+
+        public ObservableCollection<Game> Games
+        {
+            get => games;
+            set
+            {
+                if (games == value) return;
+
+                games = value;
+                OnPropertyChanged();
+            }
+        }
+        public ISyncEngine SyncEngine { get; }
 
         public GamesViewModel(ISyncEngine syncEngine)
         {
             SyncEngine = syncEngine;
-            commandQueue = new Queue<ICommand>();
+            Title = "Separate Turn Distributor";
             View = new GamesView {DataContext = this};
         }
 
-        public void Initialize()
+        public override void Initialize()
         {
             if (initialized) return;
 
@@ -44,7 +47,7 @@ namespace ChessClock.UI.ViewModels
             Games = new ObservableCollection<Game>(gamesList);
         }
 
-        public async ValueTask InitializeAsync()
+        public override async ValueTask InitializeAsync()
         {
             if (initialized) return;
 

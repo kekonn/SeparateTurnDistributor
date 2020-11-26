@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
+﻿using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Windows.Navigation;
 using ChessClock.UI.Properties;
 using ChessClock.UI.Views;
 
 namespace ChessClock.UI.ViewModels
 {
-    public class FirstSetupWizardViewModel : IViewModel
+    public class FirstSetupWizardViewModel : BaseViewModel
     {
-        public string Title { get; set; } = "Player Setup";
 
         public string PlayerName { get; set; }
 
@@ -25,6 +18,7 @@ namespace ChessClock.UI.ViewModels
 
         public FirstSetupWizardViewModel(Navigator navigator)
         {
+            Title = "Player Setup";
             View = new WizardHost() {DataContext = this};
             PlayerSeed = PlayerUtilities.GetSystemPlayerSeed();
             PlayerName = Settings.Default.PlayerName;
@@ -33,11 +27,9 @@ namespace ChessClock.UI.ViewModels
             this.navigator = navigator;
         }
 
-        public void Initialize() {}
+        public override void Initialize() {}
 
-        public ValueTask InitializeAsync() => ValueTask.CompletedTask;
-
-        public ContentControl View { get; }
+        public override ValueTask InitializeAsync() => ValueTask.CompletedTask;
 
         private void PlayerSetupDone()
         {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,9 +9,8 @@ using System.Windows.Input;
 
 namespace ChessClock.UI.ViewModels
 {
-    public interface IViewModel
+    public interface IViewModel : INotifyPropertyChanged
     {
-
         void Initialize();
         ValueTask InitializeAsync();
         ContentControl View { get; }
