@@ -229,7 +229,7 @@ namespace ChessClock.SyncEngine
         /// <returns>Queryable enumeration of players</returns>
         protected virtual IQueryable<Player> CreatePlayerSource()
         {
-            return CreateGameSource().SelectMany(g => g.Players).Distinct();
+            return CreateGameSource().SelectMany(g => g.Players).Distinct().ToArray().AsQueryable();
         }
 
         /// <summary>

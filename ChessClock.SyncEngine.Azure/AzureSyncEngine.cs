@@ -99,7 +99,11 @@ namespace ChessClock.SyncEngine.Azure
                 tableExists = tableRef.CreateIfNotExists();
             }
 
-            return tableRef.CreateQuery<AzureCiv6GameEntity>().Resolve(Resolve);
+            var query = tableRef.CreateQuery<AzureCiv6GameEntity>().Resolve(Resolve);
+
+            var games = query.Execute().ToArray();
+
+            return games.AsQueryable();
         }
 
         protected override DateTimeOffset GetGameLastModifiedTime(Game game)
