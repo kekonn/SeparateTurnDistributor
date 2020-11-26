@@ -47,13 +47,19 @@ namespace ChessClock.UI
         {
             viewModel ??= GetMainViewMode();
 
-            MainWindow?.Close();
+            if (MainWindow?.Content is ContentHostWindow)
+            {
+                var contentHost = MainWindow.Content as ContentHostWindow;
+                contentHost.DataContext = viewModel;
+            }
+            else
+            {
+                var contentHost = new ContentHostWindow() { DataContext = viewModel};
+                viewModel.Initialize();
 
-            var contentHost = new ContentHostWindow() { DataContext = viewModel};
-            viewModel.Initialize();
-
-            MainWindow = contentHost;
-            MainWindow.Show();
+                MainWindow = contentHost;
+                MainWindow.Show();
+            }
         }
 
         private IViewModel GetMainViewMode()
@@ -104,8 +110,8 @@ namespace ChessClock.UI
             {
                 options.ConnectionString = config.GetConnectionString("AzureStorage");
                 options.ContainerName = "game";
-                options.TableName = "game";
-                options.SystemPlayer = PlayerUtilities.LoadSystemPlayer();
+                options.TableName = "games";
+                options.SystemPlayer = PlayerUtilities.GetSystemPlayer();
             });
 
             services.AddSingleton(new Navigator());

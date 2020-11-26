@@ -10,44 +10,27 @@ namespace ChessClock.UI
     public static class PlayerUtilities
     {
         private static readonly ILogger Logger = LogManager.GetLogger(nameof(PlayerUtilities));
-        private static Player _systemPlayer = Player.One;
+        private static Player systemPlayer = Player.One;
 
-        public static Player LoadSystemPlayer()
+        static PlayerUtilities()
         {
-            Logger.Trace("Loading System Player");
-
-            if (_systemPlayer != Player.One)
-            {
-                return _systemPlayer;
-            }
-
-            var systemId = LoadSystemIdentifier();
-            var playerId = Settings.Default.PlayerId;
             var playerName = Settings.Default.PlayerName;
-
-            if (playerId == Guid.Empty)
+            var playerSeed = Settings.Default.PlayerSeed;
+            if (playerName is {Length: 0} || playerSeed is {Length: 0})
             {
-                byte[] guidBytes = Convert.FromBase64String(systemId);
-                playerId = new Guid(guidBytes);
+                Settings.Default.Reset();
 
-                Settings.Default.PlayerId = playerId;
-                _systemPlayer = new Player()
-                {
-                    Id = playerId,
-                    Name = playerName
-                };
-
-                Logger.Trace($"Found System Player: {_systemPlayer}");
-
-                Settings.Default.Save();
+                systemPlayer = Player.One;
             }
-
-            return _systemPlayer;
+            else
+            {
+                systemPlayer = FromSeed(playerName, playerSeed);
+            }
         }
 
         public static Player GetSystemPlayer()
         {
-            return _systemPlayer;
+            return systemPlayer;
         }
 
         public static string GetSystemPlayerSeed()
@@ -64,7 +47,6 @@ namespace ChessClock.UI
                 storedIdentifier = CalculateSystemIdentifier();
 
                 Settings.Default.SystemIdentifier = storedIdentifier;
-                Settings.Default.Save();
             }
 
             return storedIdentifier.ToLower();
@@ -88,16 +70,22 @@ namespace ChessClock.UI
         {
             Settings.Default.PlayerId = player.Id;
             Settings.Default.PlayerName = player.Name;
+            Settings.Default.PlayerSeed = GetSystemPlayerSeed();
 
             Settings.Default.Save();
+
+            systemPlayer = player;
         }
 
         public static Player FromSeed(string name, string seed)
         {
             Logger.Trace($"Creating player {name} from seed {seed}");
 
-            var player = new Player() { Name = name };
-            player.Id = new Guid(Convert.FromBase64String(seed));
+            var player = new Player
+            {
+                Name = name,
+                Id = new Guid(Convert.FromBase64String(seed))
+            };
 
             return player;
         }

@@ -15,7 +15,7 @@ namespace ChessClock.UI.ViewModels
 {
     public class GamesViewModel : IViewModel
     {
-        public Player SystemPlayer { get; set; } = Player.One;
+        public Player SystemPlayer => SyncEngine.SystemPlayer;
         public ObservableCollection<Game> Games { get; set; } = new ObservableCollection<Game>();
         public string Title { get; set; } = "Separate Turn Distributor";
         public ISyncEngine SyncEngine { get; private set; }
