@@ -47,6 +47,7 @@ namespace ChessClock.UI.ViewModels
             SyncEngine = syncEngine;
             Title = "Separate Turn Distributor";
             View = new GamesView {DataContext = this};
+            ForceSyncCommand = new ActionCommand(ForceSyncCanExecute, ForceSync);
         }
 
         public override void Initialize()
@@ -69,6 +70,16 @@ namespace ChessClock.UI.ViewModels
         {
             var gamesList = await SyncEngine.GamesForAsync(SystemPlayer);
             Games = new ObservableCollection<Game>(gamesList);
+        }
+
+        private bool ForceSyncCanExecute(object? parameter)
+        {
+            return !selectedGame?.Equals(null) ?? false;
+        }
+
+        private async void ForceSync(object? parameter)
+        {
+            await SyncEngine.Sync();
         }
     }
 }
