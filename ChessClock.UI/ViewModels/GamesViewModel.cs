@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using ChessClock.Model;
@@ -39,8 +40,21 @@ namespace ChessClock.UI.ViewModels
                 OnPropertyChanged();
             }
         }
+
+        public bool AutoSync
+        {
+            get => SyncEngine.AutoSync;
+            set
+            {
+                if (SyncEngine.AutoSync == value) return;
+
+                SyncEngine.AutoSync = value;
+                OnPropertyChanged();
+            }
+        }
         public ISyncEngine SyncEngine { get; }
-        public ICommand ForceSyncCommand { get; set; }
+        public ICommand ForceSyncCommand { get; }
+        public ICommand NextTurnCommand { get; }
 
         public GamesViewModel(ISyncEngine syncEngine)
         {
@@ -80,6 +94,16 @@ namespace ChessClock.UI.ViewModels
         private async void ForceSync(object? parameter)
         {
             await SyncEngine.Sync();
+        }
+
+        private bool IsMyTurn()
+        {
+            return SelectedGame?.Equals(null) ?? false && selectedGame.CurrentPlayer == SystemPlayer;
+        }
+
+        private void NextTurn()
+        {
+            throw new NotImplementedException();
         }
     }
 }
