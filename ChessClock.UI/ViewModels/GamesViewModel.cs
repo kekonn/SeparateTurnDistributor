@@ -41,8 +41,6 @@ namespace ChessClock.UI.ViewModels
             }
         }
 
-        public DateTimeOffset LastGameSyncTime => SelectedGame?.LastUpdated ?? DateTimeOffset.MinValue;
-
         public bool AutoSync
         {
             get => SyncEngine.AutoSync;

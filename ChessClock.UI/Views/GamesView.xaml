@@ -46,7 +46,7 @@
                     <TextBox x:Name="GameNameTextbox" Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" d:LayoutOverrides="Height" Margin="5,2,5,2" Text="{Binding Name}" VerticalContentAlignment="Center"/>
                     <Label Content="{Binding CurrentPlayer.Name}" Grid.Column="1" Grid.Row="1" Margin="5,2,5,2"/>
                     <Label Content="Last Sync Time:" Grid.Row="2" HorizontalContentAlignment="Right"/>
-                    <Label Content="{Binding LastGameSyncTime}" Grid.Column="1" Grid.Row="2"/>
+                    <Label Content="{Binding LastUpdated}" Grid.Column="1" Grid.Row="2"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Local Save">
