@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Timers;
 using Microsoft.Extensions.Logging;
@@ -84,7 +85,7 @@ namespace ChessClock.SyncEngine
         {
             Logger = logger;
             SystemPlayer = player;
-            this.autoSyncStrategy = autoSyncStrategy ?? new DefaultAutoSyncStrategy(SystemPlayer);
+            AutoSyncStrategy = autoSyncStrategy ?? new DefaultAutoSyncStrategy(SystemPlayer);
         }
 
         /// <summary>
@@ -158,13 +159,19 @@ namespace ChessClock.SyncEngine
             SuccessfullySynced = null;
             SuccessfullySynced = autoSyncStrategy.GameSyncedSuccessfully;
 
+            Logger.LogDebug($"Set new AutoSync strategy of type {this.autoSyncStrategy.GetType().FullName}");
+
             if (!(autoSyncStrategy is DefaultAutoSyncStrategy defaultSyncStrat)) return;
 
             autoSyncIntervalTimer ??= new Timer();
 
             autoSyncIntervalTimer.Stop();
             autoSyncIntervalTimer.Interval = defaultSyncStrat.MinimumInterval.TotalMilliseconds;
-            autoSyncIntervalTimer.Start();
+            if (autoSync)
+            {
+                autoSyncIntervalTimer.Start();
+                Logger.LogDebug($"Starting AutoSync timer with interval {defaultSyncStrat.MinimumInterval}");
+            }
         }
 
         /// <summary>
