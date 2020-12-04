@@ -20,5 +20,12 @@ namespace ChessClock.Model.Tests
 
             Assert.True(Player.One != playerA);
         }
+
+        [Fact]
+        public void NullEquals()
+        {
+            Assert.False(null == Player.One);
+            Assert.False(Player.One == null);
+        }
     }
 }
