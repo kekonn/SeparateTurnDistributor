@@ -11,43 +11,48 @@ namespace ChessClock.UI.Tests
 {
     internal class SyncEngineTestImpl : BaseSyncEngine
     {
-        public SyncEngineTestImpl(Player player, ILogger<ISyncEngine> logger) : base(player, null, logger)
+        private readonly Game[] games;
+
+        public SyncEngineTestImpl(Player player, ILogger<ISyncEngine> logger, Game[] games) : base(player, null, logger)
         {
+            this.games = games;
         }
 
         protected override void Sync(Game game)
         {
-            throw new NotImplementedException();
+            Logger.LogDebug($"Syncing game {game}");
         }
 
         public override ValueTask SubmitTurnAsync(Game game)
         {
-            throw new NotImplementedException();
+            return PassTurnAsync(game);
         }
 
         public override ValueTask PassTurnAsync(Game game)
         {
-            throw new NotImplementedException();
+            Logger.LogTrace($"Moving turn on game {game}");
+            game.NextTurn();
+            return ValueTask.CompletedTask;
         }
 
         protected override IQueryable<Game> CreateGameSource()
         {
-            throw new NotImplementedException();
+            return games.AsQueryable();
         }
 
         protected override DateTimeOffset GetGameLastModifiedTime(Game game)
         {
-            throw new NotImplementedException();
+            return DateTimeOffset.Now.AddHours(-1);
         }
 
         protected override DateTimeOffset GetRemoteSavefileLastModifiedTime(Game game)
         {
-            throw new NotImplementedException();
+            return DateTimeOffset.MinValue;
         }
 
         protected override DateTimeOffset GetLocalSavefileLastModifiedTime(Game game)
         {
-            throw new NotImplementedException();
+            return DateTimeOffset.Now;
         }
     }
 }
