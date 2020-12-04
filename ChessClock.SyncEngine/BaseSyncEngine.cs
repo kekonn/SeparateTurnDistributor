@@ -82,9 +82,9 @@ namespace ChessClock.SyncEngine
         /// <param name="logger">The logger to use</param>
         protected BaseSyncEngine(Player player, IAutoSyncStrategy? autoSyncStrategy, ILogger<ISyncEngine> logger)
         {
+            Logger = logger;
             SystemPlayer = player;
             this.autoSyncStrategy = autoSyncStrategy ?? new DefaultAutoSyncStrategy(SystemPlayer);
-            Logger = logger;
         }
 
         /// <summary>
