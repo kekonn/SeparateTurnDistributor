@@ -36,9 +36,9 @@ namespace ChessClock.UI.ViewModels
             }
         }
 
-        public BaseViewModel()
+        protected BaseViewModel()
         {
-            view = default;
+            view = new ContentControl();
             title = string.Empty;
         }
 
