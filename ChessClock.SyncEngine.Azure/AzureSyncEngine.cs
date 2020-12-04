@@ -80,7 +80,7 @@ namespace ChessClock.SyncEngine.Azure
 
             if (newGame.CurrentPlayer != SystemPlayer)
             {
-                Logger.LogDebug($"Pulled in remote game, but it's not our turn");
+                Logger.LogDebug($"Pulled in remote game, but it's not our turn. Skipping download.");
                 return;
             }
 
@@ -158,6 +158,7 @@ namespace ChessClock.SyncEngine.Azure
 
         private async ValueTask InsertOrMergeGame(Game game)
         {
+            Logger.LogInformation($"Updating metadata for {game}");
             var gamesTable = tableClient.GetTableReference(tableName);
             await gamesTable.CreateIfNotExistsAsync();
 
@@ -231,7 +232,11 @@ namespace ChessClock.SyncEngine.Azure
 
         private string GetFullSavefilePath(Game game)
         {
-            return filesystem.GetHotSeatSaveFileFullName(game);
+            var path = filesystem.GetHotSeatSaveFileFullName(game);
+
+            Logger.LogDebug($"Full save file path for {game} resolved to \"{path}\".");
+
+            return path;
         }
     }
 }
