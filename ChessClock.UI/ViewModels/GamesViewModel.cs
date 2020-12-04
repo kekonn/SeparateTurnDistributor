@@ -98,7 +98,7 @@ namespace ChessClock.UI.ViewModels
 
         private bool IsMyTurn()
         {
-            return SelectedGame?.Equals(null) ?? false && selectedGame.CurrentPlayer == SystemPlayer;
+            return (SelectedGame?.Equals(null) ?? false) == false && selectedGame.CurrentPlayer == SystemPlayer;
         }
 
         private void NextTurn()
