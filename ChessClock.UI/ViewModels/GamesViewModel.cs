@@ -62,6 +62,7 @@ namespace ChessClock.UI.ViewModels
             Title = "Separate Turn Distributor";
             View = new GamesView {DataContext = this};
             ForceSyncCommand = new ActionCommand(ForceSyncCanExecute, ForceSync);
+            NextTurnCommand = new ActionCommand(obj => IsMyTurn(), obj => NextTurn().Await());
         }
 
         public override void Initialize()
@@ -98,12 +99,14 @@ namespace ChessClock.UI.ViewModels
 
         private bool IsMyTurn()
         {
-            return (SelectedGame?.Equals(null) ?? false) == false && selectedGame.CurrentPlayer == SystemPlayer;
+            return selectedGame?.CurrentPlayer == SystemPlayer;
         }
 
-        private void NextTurn()
+        private async ValueTask NextTurn()
         {
-            throw new NotImplementedException();
+            if (SelectedGame == null) return;
+
+            await SyncEngine.SubmitTurnAsync(SelectedGame);
         }
     }
 }
