@@ -116,7 +116,7 @@ namespace ChessClock.SyncEngine.Azure
 
         protected override DateTimeOffset GetLocalSavefileLastModifiedTime(Game game)
         {
-            throw new NotImplementedException();
+            return filesystem.GetSaveFileLastWrite(game);
         }
 
         protected override DateTimeOffset GetRemoteSavefileLastModifiedTime(Game game)
