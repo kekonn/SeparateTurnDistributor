@@ -16,6 +16,10 @@ using ChessClock.UI.Extensions;
 using ChessClock.UI.Properties;
 using ChessClock.UI.ViewModels;
 using ChessClock.UI.Views;
+using Microsoft.Extensions.Logging;
+using NLog;
+using NLog.Extensions.Logging;
+using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 
 namespace ChessClock.UI
@@ -102,7 +106,12 @@ namespace ChessClock.UI
 
         private void AddServices(IServiceCollection services, IConfiguration config)
         {
-            services.AddLogging(config);
+            services.AddLogging(builder =>
+            {
+                builder.ClearProviders();
+                builder.SetMinimumLevel(LogLevel.Trace);
+                builder.AddNLog(config);
+            });
 
             services.AddCiv6Filesystem(config);
 
@@ -115,6 +124,13 @@ namespace ChessClock.UI
             });
 
             services.AddSingleton(new Navigator());
+
+            Exit += App_Exit;
+        }
+
+        private void App_Exit(object sender, ExitEventArgs e)
+        {
+            LogManager.Shutdown();
         }
 
         internal void ShowViewModel(IViewModel viewModel)

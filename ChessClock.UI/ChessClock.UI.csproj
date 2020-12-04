@@ -37,7 +37,7 @@
     <None Update="hotseat.ico">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
-    <None Update="NLog.config">
+    <None Update="nlog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Properties\Settings.settings">
