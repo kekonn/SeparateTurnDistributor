@@ -104,7 +104,7 @@ namespace ChessClock.UI.ViewModels
             return selectedGame?.CurrentPlayer == SystemPlayer;
         }
 
-        private async ValueTask NextTurn()
+        private async Task NextTurn()
         {
             if (SelectedGame == null) return;
 

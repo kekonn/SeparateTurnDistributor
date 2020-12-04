@@ -4,7 +4,7 @@ namespace ChessClock.UI.Extensions
 {
     public static class TaskExtensions
     {
-        public static TResult Await<TResult>(this Task<TResult> task)
+        public static void Await(this Task task)
         {
             return task.GetAwaiter().GetResult();
         }
