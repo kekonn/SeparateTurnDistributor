@@ -167,6 +167,7 @@ namespace ChessClock.SyncEngine
 
             autoSyncIntervalTimer.Stop();
             autoSyncIntervalTimer.Interval = defaultSyncStrat.MinimumInterval.TotalMilliseconds;
+            autoSyncIntervalTimer.Elapsed += (sender, args) => AutoSyncTimerElapsed();
             if (autoSync)
             {
                 autoSyncIntervalTimer.Start();
