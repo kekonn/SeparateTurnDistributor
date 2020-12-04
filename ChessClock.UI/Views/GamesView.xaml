@@ -54,7 +54,7 @@
             </TabItem>
         </TabControl>
         <Button Content="New Game" Grid.Column="1" Margin="0,5,624,17" Grid.Row="1"/>
-        <Button x:Name="NextTurnButton" Content="Next Turn" Grid.Column="1" Grid.Row="1" Margin="85,5,550,17"/>
+        <Button x:Name="NextTurnButton" Content="Next Turn" Grid.Column="1" Grid.Row="1" Margin="85,5,550,17" Command="{Binding NextTurnCommand}"/>
         <ToggleButton x:Name="AutoSyncToggle" Content="Auto Sync" Grid.Column="1" Grid.Row="1" Margin="159,5,477,17" IsChecked="{Binding AutoSync}"/>
 
     </Grid>
