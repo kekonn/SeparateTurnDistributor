@@ -68,6 +68,20 @@ namespace ChessClock.UI.Tests
             Assert.True(viewModel.NextTurnCommand.CanExecute(null));
         }
 
+        [WpfFact]
+        public void CantNextTurnWhenNotMyTurn()
+        {
+            Assert.NotNull(viewModel.NextTurnCommand);
+
+            viewModel.SelectedGame = viewModel.Games[0];
+            Assert.NotNull(viewModel.SelectedGame);
+            Assert.True(viewModel.NextTurnCommand.CanExecute(null));
+            
+            viewModel.NextTurnCommand.Execute(null);
+            Assert.False(viewModel.NextTurnCommand.CanExecute(null));
+            
+        }
+
         private ILogger<TClass> CreateLogger<TClass>()
         {
             return outputHelper.BuildLoggerFor<TClass>();
