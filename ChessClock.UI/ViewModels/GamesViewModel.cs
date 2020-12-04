@@ -41,6 +41,8 @@ namespace ChessClock.UI.ViewModels
             }
         }
 
+        public DateTimeOffset LastGameSyncTime => SelectedGame?.LastUpdated ?? DateTimeOffset.MinValue;
+
         public bool AutoSync
         {
             get => SyncEngine.AutoSync;
@@ -61,6 +63,8 @@ namespace ChessClock.UI.ViewModels
             SyncEngine = syncEngine;
             Title = "Separate Turn Distributor";
             View = new GamesView {DataContext = this};
+            
+            //Command setup. Extracting this to a method would require us to add setters to the properties
             ForceSyncCommand = new ActionCommand(ForceSyncCanExecute, ForceSync);
             NextTurnCommand = new ActionCommand(obj => IsMyTurn(), obj => NextTurn().Await());
         }
