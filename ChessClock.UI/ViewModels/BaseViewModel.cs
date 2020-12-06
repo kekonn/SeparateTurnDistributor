@@ -24,7 +24,7 @@ namespace ChessClock.UI.ViewModels
             }
         }
 
-        public string Title
+        public virtual string Title
         {
             get => title;
             set
