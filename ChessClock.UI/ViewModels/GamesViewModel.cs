@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using ChessClock.Model;
@@ -11,13 +12,13 @@ namespace ChessClock.UI.ViewModels
 {
     public class GamesViewModel : BaseViewModel
     {
-        private ObservableCollection<Game> games = new ObservableCollection<Game>();
+        private ObservableCollection<GameViewModel> games = new ObservableCollection<GameViewModel>();
         private bool initialized = false;
-        private Game? selectedGame;
+        private GameViewModel? selectedGame;
 
         public Player SystemPlayer => SyncEngine.SystemPlayer;
 
-        public ObservableCollection<Game> Games
+        public ObservableCollection<GameViewModel> Games
         {
             get => games;
             set
@@ -29,7 +30,7 @@ namespace ChessClock.UI.ViewModels
             }
         }
 
-        public Game? SelectedGame
+        public GameViewModel? SelectedGame
         {
             get => selectedGame;
             set
@@ -86,7 +87,7 @@ namespace ChessClock.UI.ViewModels
         private async ValueTask InitGamesList()
         {
             var gamesList = await SyncEngine.GamesForAsync(SystemPlayer);
-            Games = new ObservableCollection<Game>(gamesList);
+            Games = new ObservableCollection<GameViewModel>(gamesList.Select(g => new GameViewModel(g)));
         }
 
         private bool ForceSyncCanExecute(object? parameter)
@@ -97,6 +98,7 @@ namespace ChessClock.UI.ViewModels
         private async void ForceSync(object? parameter)
         {
             await SyncEngine.Sync();
+            //TODO: actually update vm
         }
 
         private bool IsMyTurn()
@@ -108,7 +110,8 @@ namespace ChessClock.UI.ViewModels
         {
             if (SelectedGame == null) return;
 
-            await SyncEngine.SubmitTurnAsync(SelectedGame);
+            await SyncEngine.SubmitTurnAsync(SelectedGame.Game);
+            //TODO: Update VM
         }
     }
 }
