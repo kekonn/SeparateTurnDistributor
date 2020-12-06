@@ -13,5 +13,10 @@ namespace ChessClock.UI.Extensions
         {
             task.GetAwaiter().GetResult();
         }
+
+        public static TResult Await<TResult>(this Task<TResult> task)
+        {
+            return task.GetAwaiter().GetResult();
+        }
     }
 }
