@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using ChessClock.Model;
 using ChessClock.UI.Extensions;
@@ -41,13 +39,20 @@ namespace ChessClock.UI.ViewModels
             InitializeAsync().Await();
         }
 
-        public async override ValueTask InitializeAsync()
+        public override ValueTask InitializeAsync()
         {
-            if (initialized) return;
+            if (initialized) return ValueTask.CompletedTask;
 
             View = new GameView() {DataContext = this};
 
             initialized = true;
+
+            return ValueTask.CompletedTask;
+        }
+
+        public bool Equals(Game otherGame)
+        {
+            return game.Equals(otherGame);
         }
     }
 }

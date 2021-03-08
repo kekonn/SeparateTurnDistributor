@@ -42,10 +42,10 @@ namespace ChessClock.UI.Tests
         [WpfFact]
         public void SelectedGameDetection()
         {
-            viewModel.SelectedGame = games[0];
+            viewModel.SelectedGame = new GameViewModel(games[0]);
 
             Assert.NotNull(viewModel.SelectedGame);
-            Assert.True(games[0].Equals(viewModel.SelectedGame));
+            Assert.True(viewModel.SelectedGame.Equals(games[0]));
         }
 
         [WpfFact]
