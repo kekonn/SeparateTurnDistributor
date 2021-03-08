@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
 using System.Threading.Tasks;
 using ChessClock.Model;
 using ChessClock.UI.Extensions;
@@ -29,7 +29,7 @@ namespace ChessClock.UI.ViewModels
 
         public GameViewModel(Game game)
         {
-            this.game = game;
+            this.game = game ?? throw new ArgumentNullException(nameof(game));
         }
 
         public override void Initialize()
